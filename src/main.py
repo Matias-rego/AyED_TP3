@@ -1,11 +1,11 @@
 
 """
     integrantes:
-
-    Joaquin Ismael Guarc
+    
+    Nicolás Fossati
     Matias Miguel Angel Rego
-    Lucca Tiziano Vera Singh
-    Alan Benjamin Caceres
+    Marcos Banducci
+    Tomas Agusti
     
     comisión: ISI 101
 """
@@ -1059,10 +1059,10 @@ print("""########       ########       ########
    #########   ########   #########         
       ##########################            Programa hecho por:
           ##################               
-######################################        -Joaquin Ismael Guarc.
-######################################        -Matias Miguel Angel Rego.
-######################################        -Lucca Tiziano Vera Singh.
-         ####################                 -Alan Benjamin Caceres
+######################################        -Nicolás Fossati
+######################################        -Matias Miguel Angel Rego
+######################################        -Marcos Banducci
+         ####################                 -Tomas Agusti
      ############################
    #########   ########   #########
   ########     ########     ########
