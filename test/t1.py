@@ -32,8 +32,8 @@ moderadores = [
  ]
 
 
-tim = 2
-tim2 = 0.1
+tim = 0
+tim2 = 0.0
 
 
 while True:

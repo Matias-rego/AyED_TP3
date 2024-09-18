@@ -1,6 +1,5 @@
-
 """
-    integrantes:
+    Integrantes:
     
     Nicolás Fossati
     Matias Miguel Angel Rego
@@ -10,40 +9,16 @@
     comisión: ISI 101
 """
 
+
 # importamos los modulos que usamos
 
 from datetime import datetime
 import os
 from random import randint
+from consola import * 
 
 
-# https://stackoverflow.com/questions/35805078/how-do-i-convert-a-password-into-asterisks-while-it-is-being-entered/52636454#52636454
-#
-# encontramos en stackoverflow este codigo que soluciona el tema de los asterisco
-
-try:
-    from msvcrt import getch 
-    def getpass(prompt,char="*"):
-        print(prompt, end='', flush=True)
-        buf = b''
-        while True:
-            ch = getch()
-            if ch in {b'\n', b'\r', b'\r\n'}:
-                print('')
-                return buf.decode(encoding='utf-8')
-            elif ch == b'\x03': # Ctrl+C
-                # raise KeyboardInterrupt
-                return ''
-            elif ch in {b'\x08', b'\x7f'}: # Backspace
-                buf = buf[:-1]
-                print(f'\r{(len(prompt)+len(buf)+1)*" "}\r{prompt}{char * len(buf)}', end='', flush=True)
-            else:
-                buf += ch
-                print(char, end='', flush=True)
-
-except ImportError:
-    from getpass import getpass  # type: ignore
-
+    
 #type:
 #   M_8x8_str = array[0..7,0..7] of String
 #   M_2x4_str   = array[0..1,0..4] of String
@@ -59,6 +34,8 @@ except ImportError:
 
 # datos 
 
+
+
 estudiantes = [[""]*8 for _ in range(0,8)]
 
 moderadores = [[""]*2 for _ in range(0,4)]
@@ -68,28 +45,7 @@ likes = [[0]*8 for _ in range(0,8)]
 reportes_s = [[0]*8 for _ in range(0,8)]
 reportes_m  = [[""]*8 for _ in range(0,8)]
 
-# funciones estetica
 
-def clear():
-    # funcion para limpiar la consola
-    # dependiendo del sistema operativo mandamos se usa el comando corespondiente 
-    
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def invalido():
-    clear()
-    print("\033[1;31mDato Invalido, ingreselo de nuevo\033[0;m")
-
-def construcción():
-    clear()
-    print("\033[1;34m--------------------------------------")
-    print("|\033[0;m        \033[1;37mEn Construcción...          \033[1;34m|")
-    print("--------------------------------------\033[0;m\n")
-    getpass("Oprima enter para volver al menu anterior\n", '')
-    clear()
 
 # funciones de datos
 def inicialización(likes, estudiantes, moderadores):
@@ -97,6 +53,8 @@ def inicialización(likes, estudiantes, moderadores):
     # Var
     # Entero:i,j
     # String: opc
+    
+    
     
     for i in range(0,8):
         for j in range(0,8):
@@ -119,12 +77,12 @@ def inicialización(likes, estudiantes, moderadores):
         print("|\033[0;m\033[1;37m Ingrese los datos del "+str(i+1)+"° moderador:\033[1;34m|")
         print("--------------------------------------\033[0;m\n")
         
-        gmail = input("Ingrese el gmail del moderador: \n\033[1;34m>>> \033[0;m")
+        email = input("Ingrese el email del moderador: \n\033[1;34m>>> \033[0;m")
 
-        while busca_estud(estudiantes,gmail,0)>=0 or busca_mod(moderadores,gmail)>=0 :
+        while busca_estud(estudiantes,email,0)>=0 or busca_mod(moderadores,email)>=0 :
             invalido()
-            gmail = input("\n\033[1;34m>>> \033[0;m")
-        moderadores[i][0] = gmail
+            email = input("\n\033[1;34m>>> \033[0;m")
+        moderadores[i][0] = email
         moderadores[i][1] = input("\nIngrese la contraseña del moderador: \n\033[1;34m>>> \033[0;m")
         if i < 3:
             opc = input("Desea ingresar otro moderador?\n(si/no): \033[1;34m>>> \033[0;m")
@@ -205,25 +163,25 @@ def busca_mod(mod,dato):
     else: 
         return -1
     
-def is_login(gmail,password,user1,user2):
-    # (gmail:str, password:str, user1: M_8x8_str, user2: M_2x4_str)
+def is_login(email,password,user1,user2):
+    # (email:str, password:str, user1: M_8x8_str, user2: M_2x4_str)
     # Var
     # Entero:i
     
-    if gmail != "" and password != "":
+    if email != "" and password != "":
         i = 0
-        while not (user1[i][0] == gmail and user1[i][1] == password and user1[i][2] == "ACTIVO") and i != 7: 
+        while not (user1[i][0] == email and user1[i][1] == password and user1[i][2] == "ACTIVO") and i != 7: 
             i += 1
             
-        if user1[i][0] == gmail and user1[i][1] == password:
+        if user1[i][0] == email and user1[i][1] == password:
             return i
         
         else:
             i = 0
-            while not (user2[i][0] == gmail and user2[i][1] == password) and i != 3: 
+            while not (user2[i][0] == email and user2[i][1] == password) and i != 3: 
                 i += 1
                 
-            if user2[i][0] == gmail and user2[i][1] == password:
+            if user2[i][0] == email and user2[i][1] == password:
                 return i + 8
             else:
                 return -1
@@ -260,7 +218,7 @@ def menu_logueo(estudiantes,moderadores):
     # (estudiantes: M_8x8_str, moderadores: M_2x4_str,)
     # Var
     # Entero: login_e, intentos
-    # String: gmail, password
+    # String: email, password
     login_e = -1 
     intentos = 3
     
@@ -278,11 +236,11 @@ def menu_logueo(estudiantes,moderadores):
             print("Te quedan ",intentos," intentos restantes")
             print("Intente nuevamente\n")
     
-        gmail = input("Gmail:\n\033[1;34m>>> \033[0;m")
+        email = input("email:\n\033[1;34m>>> \033[0;m")
         print("\nIngrese su contraseña:")
         password = getpass("\033[1;34m>>> \033[0;m","*")
         
-        login_e = is_login(gmail,password,estudiantes,moderadores)
+        login_e = is_login(email,password,estudiantes,moderadores) 
     
         if login_e == -1:
             intentos -= 1
@@ -351,7 +309,7 @@ def menu_registrarse(moderadores,estudiantes,text="         Registrar usuario   
     # (moderadores: M_2x4_str, estudiantes: M_8x8_str, text: str, ispassword: bool)
     # Var
     # Entero: pos,
-    # String:gmail, password1, password2
+    # String:email, password1, password2
     clear()
     pos = busca_estud(estudiantes,"",2)
 
@@ -361,8 +319,8 @@ def menu_registrarse(moderadores,estudiantes,text="         Registrar usuario   
         print("|\033[0;m\033[1;37m"+text+"\033[1;34m|")
         print("--------------------------------------\033[0;m\n")
         
-        print("\033[1;37m Ingrese su gmail.")
-        gmail = input("\n\033[1;34m>>> \033[0;m")
+        print("\033[1;37m Ingrese su email.")
+        email = input("\n\033[1;34m>>> \033[0;m")
             
         print("\033[1;37m Ingrese su contraseña.")
         password1 = input("\n\033[1;34m>>> \033[0;m")
@@ -372,20 +330,20 @@ def menu_registrarse(moderadores,estudiantes,text="         Registrar usuario   
         else:
             password2 = password1
 
-        while busca_estud(estudiantes,gmail,0)>=0 or gmail == "" or password1 == "" or password1 != password2 or busca_mod(moderadores,gmail)>=0:
+        while busca_estud(estudiantes,email,0)>=0 or email == "" or password1 == "" or password1 != password2 or busca_mod(moderadores,email)>=0:
             clear()
             print("\033[1;34m--------------------------------------")
             print("|\033[0;m\033[1;37m"+text+"\033[1;34m|")
             print("--------------------------------------\033[0;m\n")
             
-            if gmail == "":
-                print("Tiene que ingresar un gmail.")
-            elif busca_estud(estudiantes,gmail,0)>=0 or busca_mod(moderadores,gmail)>=0:
-                print("El gmail ingresado ya esta en uso")
+            if email == "":
+                print("Tiene que ingresar un email.")
+            elif busca_estud(estudiantes,email,0)>=0 or busca_mod(moderadores,email)>=0:
+                print("El email ingresado ya esta en uso")
             else: 
                 print("")
-            print("\033[1;37m Ingrese su gmail.")
-            gmail = input("\n\033[1;34m>>> \033[0;m")
+            print("\033[1;37m Ingrese su email.")
+            email = input("\n\033[1;34m>>> \033[0;m")
 
             if password1 != password1: 
                 print("Las contraseñas no son identicas. Ingreselas nuevamente")
@@ -399,7 +357,7 @@ def menu_registrarse(moderadores,estudiantes,text="         Registrar usuario   
             else:
                 password2 = password1
             
-        estudiantes[pos][0] = gmail
+        estudiantes[pos][0] = email
         estudiantes[pos][1] = password1
         estudiantes[pos][2] = "ACTIVO"
         
@@ -583,7 +541,7 @@ def menu_ver_candidatos(estudiantes, id, likes):
         
         opc = ""
         print("\033[1;34m--------------------------------------\033[0;m")
-        print("\033[1;34m|\033[0;mgmail              : ",estudiantes[poss[pos]][0])
+        print("\033[1;34m|\033[0;memail              : ",estudiantes[poss[pos]][0])
         print("\033[1;34m|\033[0;mNombre             : ",estudiantes[poss[pos]][3])
         print("\033[1;34m|\033[0;mFecha de nacimiento: ",estudiantes[poss[pos]][4])
         print("\033[1;34m|\033[0;mEdad               : ",calcular_edad(estudiantes[poss[pos]][4]))
@@ -648,7 +606,7 @@ def menu_ver_candidatos(estudiantes, id, likes):
 def menu_reportar(estudiantes, id_1, reportes_s, reportes_m):
     # (estudiantes: M_8X8_str, id_1: int, reportes_s: M_8x8_int, reportes__m: M_8X8_str) 
     # Var
-    # String: gmail, motivo
+    # String: email, motivo
     # Entero: id
     
     id_2= -1
@@ -657,13 +615,13 @@ def menu_reportar(estudiantes, id_1, reportes_s, reportes_m):
         print("\033[1;34m--------------------------------------")
         print("|\033[0;m          \033[1;37mReportar usuario          \033[1;34m|")
         print("--------------------------------------\033[0;m\n")
-        print("Ingrese el gmail del usuario a reportar")
+        print("Ingrese el email del usuario a reportar")
         
         if id_2 == id_1:
             print("no te puedes reportar a ti mismo")
 
-        gmail = input("\n\033[1;34m>>> \033[0;m")
-        id_2 = busca_estud(estudiantes,gmail,0)
+        email = input("\n\033[1;34m>>> \033[0;m")
+        id_2 = busca_estud(estudiantes,email,0)
         
         clear()
         if id_2 == -1:
@@ -789,7 +747,7 @@ def menu_desactivar_usuario(estudiantes):
         print("|\033[0;m         \033[1;37mDesactivar usuario         \033[1;34m|")
         print("--------------------------------------\033[0;m\n")
         print("\033[1;37m1\033[0;m. con id.")
-        print("\033[1;37m2\033[0;m. con gmail de usuario.")
+        print("\033[1;37m2\033[0;m. con email de usuario.")
         
         opc = input("\n\033[1;34m>>> \033[0;m")
         clear()
@@ -815,10 +773,10 @@ def menu_desactivar_usuario(estudiantes):
             print("\033[1;34m--------------------------------------")
             print("|\033[0;m        \033[1;37mDesactivar usuario          \033[1;34m|")
             print("--------------------------------------\033[0;m\n")
-            print("Ingrese el gmail del usuario a desactivar")
+            print("Ingrese el email del usuario a desactivar")
     
-            gmail = input("\n\033[1;34m>>> \033[0;m")
-            id = busca_estud(estudiantes,gmail,0)
+            email = input("\n\033[1;34m>>> \033[0;m")
+            id = busca_estud(estudiantes,email,0)
             clear()
             if id == -1:
                 invalido()
@@ -1025,9 +983,9 @@ while opc!="0":
         
     # Mostramos el menu de login
     print("\033[1;34m--------------------------------------")     
-    print("|\033[0;m            \033[1;37mMenu Logearse           \033[1;34m|")
+    print("|\033[0;m            \033[1;37mMenu Loguearse           \033[1;34m|")
     print("--------------------------------------\033[0;m\n")
-    print("\033[1;37m1\033[0;m. Logearse.")
+    print("\033[1;37m1\033[0;m. Loguearse.")
     print("\033[1;37m2\033[0;m. Registrarse.")
     print("\033[1;37m3\033[0;m. Bonus tracks.")
     print("\033[1;37m0\033[0;m. Salir.")
@@ -1050,22 +1008,5 @@ while opc!="0":
         case "0": clear()
         case  _ : invalido()
 
-print("           \033[1;37mFin del programa           ")
-print("       \033[1;37mGracias por visitarnos.         \n\033[0;m")
 
-print("""########       ########       ########
- #######       ########       #######
-  ########     ########     ########
-   #########   ########   #########         
-      ##########################            Programa hecho por:
-          ##################               
-######################################        -Nicolás Fossati
-######################################        -Matias Miguel Angel Rego
-######################################        -Marcos Banducci
-         ####################                 -Tomas Agusti
-     ############################
-   #########   ########   #########
-  ########     ########     ########
- #######       ########       #######
- #######       ########       #######""")
 
