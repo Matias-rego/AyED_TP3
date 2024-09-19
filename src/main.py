@@ -135,7 +135,7 @@ def calcular_edad(fecha_nacimiento):
         edad -= 1
     return edad
 
-def busca_estud(estud,dato,tipo):
+def busca_estud(estud,dato,tipo):#YA PASADA
     # (estudiantes: M_8x8_str, dato: str, tipo: int)
     # Var
     # Entero:i
@@ -149,7 +149,7 @@ def busca_estud(estud,dato,tipo):
     else: 
         return -1
      
-def busca_mod(mod,dato):
+def busca_mod(mod,dato):#YA PASADA
     # (mod: M_2x4_str, dato: str)
     # Var
     # Entero:i

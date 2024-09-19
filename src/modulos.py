@@ -16,7 +16,8 @@ def abrir_archivos():
     if os.path.exists (ruta_estudiantes):
         logico_estudiantes = open(ruta_estudiantes, "r+b")
     else:
-        logico_estudiantes = open(ruta_estudiantes, "w+b") 
+        logico_estudiantes = open(ruta_estudiantes, "w+b")
+        regis_estu()
         
     if os.path.exists (ruta_moderadores):
         logico_moderadores = open(ruta_moderadores, "r+b")
@@ -38,6 +39,11 @@ def abrir_archivos():
         logico_reportes = open(ruta_reportes, "r+b")
     else:
         logico_reportes = open(ruta_reportes, "w+b")
+        
+    
+def regis_estu():
+    
+    pass
         
 def busca_email(email) -> bool:
     pass
