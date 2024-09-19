@@ -20,7 +20,7 @@ def abrir_archivos():
         logico_estudiantes = open(ruta_estudiantes, "r+b")
     else:
         logico_estudiantes = open(ruta_estudiantes, "w+b")
-        regis_estu()
+        pr_reg_us()
         
     if os.path.exists (ruta_moderadores):
         logico_moderadores = open(ruta_moderadores, "r+b")
@@ -138,7 +138,7 @@ def busca_estud(id):
     if int(id)==True:
         t=os.path.getsize(ruta_estudiantes)
         if t!=0:
-            ruta_estudiantes.seek(0,0)
+            logico_estudiantes.seek(0,0)
             pp=0
             vr=pickle.load(logico_estudiantes)
             while logico_estudiantes.tell()<t and id!=vr.id:
@@ -153,7 +153,7 @@ def busca_estud(id):
     if int(id)==False:
         t=os.path.getsize(ruta_estudiantes)
         if t!=0:
-            ruta_estudiantes.seek(0,0)
+            logico_estudiantes.seek(0,0)
             pp=0
             vr=pickle.load(logico_estudiantes)
             while logico_estudiantes.tell()<t and id!=vr.email:
@@ -206,5 +206,38 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
     getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
+def pr_reg_us(self):
+    vr = pickle.load(logico_estudiantes)
+    id = 0
+    vr.id = id + 1
+    vr.email = ""
+    vr.contraseña = ""
+    vr.name = ""
+    vr.sexo = ""
+    vr.estado = True
+    vr.materia_fav = ""
+    vr.bio =""
+    vr.pais =""
+    vr.ciudad =""
+    vr.fecha = ""
 
+    pass
 
+def pre_usuario():
+    for i in range(4):
+        usuariogenerico = Estudiantes()
+        id = 0
+        usuariogenerico.id = id + 1
+        usuariogenerico.email = ""
+        usuariogenerico.contraseña = ""
+        usuariogenerico.name = ""
+        usuariogenerico.sexo = ""
+        usuariogenerico.estado = True
+        usuariogenerico.materia_fav = ""
+        usuariogenerico.bio =""
+        usuariogenerico.pais =""
+        usuariogenerico.ciudad =""
+        usuariogenerico.fecha = ""
+        usuariogenerico.Format_Estudiante()
+        logico_estudiantes.seek(0,2)
+        pickle.dump(usuariogenerico, logico_estudiantes)
