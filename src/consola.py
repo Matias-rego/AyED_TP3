@@ -1,11 +1,7 @@
 # Funciones esteticas
 
-from math import inf
 import os
 import time
-
-from glm import length
-from sympy import true
 
 
 # https://stackoverflow.com/questions/35805078/how-do-i-convert-a-password-into-asterisks-while-it-is-being-entered/52636454#52636454
@@ -30,7 +26,7 @@ try:
         return buf.decode(encoding='iso8859-1')
 
 except ImportError:
-    from getpass import getpass  # type: ignore
+    from getpass import getpass  
 
 VACIO    = "\033[0;m"
 ROJO     = "\033[1;31m"
@@ -45,7 +41,7 @@ DELAY    = 0.025
  
 def clear():
     # funcion para limpiar la consola
-    # dependiendo del sistema operativo mandamos se usa el comando corespondiente 
+    # dependiendo del sistema operativo se usa el comando corespondiente 
     
     if os.name == "nt":
         os.system("cls")
@@ -85,72 +81,72 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
     copc = 0
     cartel(text,color)
     print(suptext)
-    while opcs[copc] != "" and copc < 10:
-        print("\n"+BLANCO +opcs[copc][0:2]+VACIO, end="")
-
-        for j in range(2,len(opcs[copc])):
-            print(opcs[copc][j], end="",flush= True)
-            time.sleep(DELAY)
-
+    while opcs[copc] != "" and copc < 9:
         copc += 1
-    print("\n")
-    while True:
-        print("\r"+VERDE+">>> \t", end="")
-        opc = getch().decode(encoding='iso8859-1').lower()
-        print(opc+VACIO, end="")
-        i = 0
-        while opc != opcs[i][0] and i < copc-1:
-            i += 1
-        
-        if opc == opcs[i][0]:
-            print(" "*10,opcs[i].ljust(50)[2:], end="")
-        else:
-            print(" "*10,ROJO+"Error, valor fuera de rango                       "+VACIO, end="")
-        
-    # opc == opcs[i][0]  
-    # while invalido:
-    #     print("\n\n"+VERDE+">>> "+VACIO, end="")
-    #     opc = getch().decode(encoding='utf-8').lower()
-    #     print(opc, end="")
-    #     i = 0
-    #     while opc != opcs[i][0] and i < copc-1:
-    #         i += 1
-            
-    #     if opc == opcs[i][0]:
-    #         invalido = False
-    #     else:
-    #         pass
-    #         # for j in range(0,len(opc)):
-    #         #     print("\b", end="",flush= True)
-    #         #     time.sleep(DELAY)
-                
-    #         # t = "Opcion incorecta"
-    #         # print(ROJO ,end="")
-    #         # for j in range(0,16):
-    #         #     print(t[j], end="",flush= True)
-    #         #     time.sleep(DELAY)
-    #         # time.sleep(1)
-            
-                
-    #         # for j in range(0,16):
-    #         #     print("\b", end="",flush= True)
-    #         #     time.sleep(DELAY)
-            
-    clear()
-    return opc
     
-input()
-opc = menu("Menu principal",
-           
-           opcs=["1. Gestionar mi perfil.",
-                             "2. Gestionar candidatos.",
-                             "3. Matcheos.",
-                             "4. Reportes estadísticos.",
-                             "0. Salir.","","",""]) 
+    for i in range(0,copc+1):
+        print("\n"+BLANCO +opcs[i][0:2]+VACIO, end="")
 
-match (opc):  
-    case "1": print("Opcion 1")
-    case "2": print("Opcion 2")
-    case "3": print("Opcion 3")
-    case "4": print("Opcion 4")
-    case "0": print("Opcion 0")
+        for j in range(2,len(opcs[i])):
+            print(opcs[i][j], end="",flush= True)
+            time.sleep(DELAY)
+    if opcs[copc] == "": copc -= 1
+        
+    print("\n"+" "*150)
+    preopc = ""
+    opc = ""
+    print(VERDE+" >>> ", end="\r")
+    ispreopc = False
+    while opc != "\r":
+        preopc = opc
+        opc = getch().decode(encoding='iso8859-1').lower() #iso8859-1
+        
+        # me fijo si lo que el usuario ingreso es una opcion valida.
+        i = 0
+        while i < copc and opc != opcs[i][0] :
+            i += 1
+      
+        
+        # si en una opcion valida le muestro la opcion. 
+        if opc == opcs[i][0]:
+            ispreopc = True
+            print("\r"+VERDE+" >>> "+VACIO+opc+VERDE+" <<<"+" "+VACIO+opcs[i][3:].ljust(50), end="\r",flush= True)
+        
+        # si es un enter 
+        elif opc == "\r":
+            if ispreopc:
+                print("\r"+VERDE+" --- "+VACIO+preopc+VERDE+" ---"+" "+VERDE+"Opcion seleccionada."+" "*31, end="\r",flush= True)
+                time.sleep(DELAY*10)
+                print("\r"+VERDE+" >>> "+VACIO+preopc+VERDE+" <<<", end="\r",flush= True)
+            else:
+                print("\r"+VERDE+" --- "+ROJO+preopc+VERDE+" ---"+" "+ROJO+preopc+": No es una opcion valida!!!"+" "*22, end="\r",flush= True)
+                time.sleep(DELAY*5)
+                print("\r"+VERDE+" >>> "+ROJO+preopc+VERDE+" <<<", end="\r",flush= True)
+                opc = " "
+                
+        elif opc == "\t" or opc == "\b":
+            ispreopc = False
+            print("\r"+VERDE+" >>> "+AMARILLO+" "+VERDE+" <<<"+" "+AMARILLO+"Opcion invalida."+" "*36, end="\r",flush= True)
+            
+        # si no es ninguno de los casos anteriores muestro una advertencia. 
+        else:
+            ispreopc = False
+            print("\r"+VERDE+" >>> "+AMARILLO+opc+VERDE+" <<<"+" "+AMARILLO+"Opcion invalida."+" "*36, end="\r",flush= True) 
+    print(VACIO)
+    clear()
+    return preopc
+    
+
+opc = menu("Menu principal", opcs=[
+    "1. Gestionar mi perfil.",
+    "2. Gestionar candidatos.",
+    "3. Matcheos.",
+    "4. Reportes estadísticos.",
+    "5. Opcion5",
+    "6. Opcion6",
+    "7. Opcion7",
+    "8. Opcion8",
+    "9. Opcion9",
+    "0. Salir."]) 
+
+print(opc)
