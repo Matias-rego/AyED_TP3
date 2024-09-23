@@ -20,13 +20,13 @@ def abrir_archivos():
         logico_estudiantes = open(ruta_estudiantes, "r+b")
     else:
         logico_estudiantes = open(ruta_estudiantes, "w+b")
-        pr_reg_us()
+        pre_usuario()
         
     if os.path.exists (ruta_moderadores):
         logico_moderadores = open(ruta_moderadores, "r+b")
     else:
         logico_moderadores = open(ruta_moderadores, "w+b")
-        regis_mod()
+        # regis_mod()
         
     if os.path.exists (ruta_administradores):
         logico_administradores = open(ruta_administradores, "r+b")
@@ -118,7 +118,7 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
     getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
-def pr_reg_us(self):
+def pr_reg_us():
     vr = pickle.load(logico_estudiantes)
     id = 0
     vr.id = id + 1
@@ -133,7 +133,6 @@ def pr_reg_us(self):
     vr.ciudad =""
     vr.fecha = ""
 
-    pass
 
 def pre_usuario():
     usuariogenerico = Estudiantes() # type: ignore
@@ -153,3 +152,6 @@ def pre_usuario():
         usuariogenerico.Format_Estudiante()
         logico_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, logico_estudiantes)
+        
+if  "__main__" == __name__:
+    abrir_archivos()

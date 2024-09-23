@@ -20,7 +20,7 @@ class Estudiantes:
         self.email          = self.email.ljust(32," ")
         self.contraseña     =self.contraseña.ljust(32," ")
         self.name           =self.name.ljust(32," ")
-        self.materia_fav    =self.materia_fav(13," ")
+        self.materia_fav    =self.materia_fav.ljust(13," ")
         self.bio            =self.bio.ljust(255," ")
         self.pais           =self.pais.ljust(32," ")
         self.ciudad         =self.ciudad.ljust(32," ")
