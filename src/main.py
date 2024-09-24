@@ -541,7 +541,7 @@ def menu_ver_candidatos(estudiantes, id, likes):
         
         opc = ""
         print("\033[1;34m--------------------------------------\033[0;m")
-        print("\033[1;34m|\033[0;memail              : ",estudiantes[poss[pos]][0])
+        print("\033[1;34m|\033[0;mEmail              : ",estudiantes[poss[pos]][0])
         print("\033[1;34m|\033[0;mNombre             : ",estudiantes[poss[pos]][3])
         print("\033[1;34m|\033[0;mFecha de nacimiento: ",estudiantes[poss[pos]][4])
         print("\033[1;34m|\033[0;mEdad               : ",calcular_edad(estudiantes[poss[pos]][4]))

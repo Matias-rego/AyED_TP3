@@ -4,6 +4,25 @@ import os
 import time
 from msvcrt import getch 
 
+def clear(): ...
+
+if os.name == "nt":
+    def clear():
+        os.system("cls")
+    from msvcrt import getch
+    
+else:
+    def clear():
+        os.system("clear")
+
+    try:
+        from getch import getch
+
+    except ImportError:
+        print("eror")
+    
+    
+
 VACIO    = "\033[0;m"
 ROJO     = "\033[1;31m"
 VERDE    = "\033[1;32m" 
@@ -125,14 +144,7 @@ def getpass(ver = 1):
         print(" "+ojo[ver]+" >>> "+password.ljust(16,b" ").decode(encoding='iso8859-1')+ " " +men.ljust(50," "), end="\r", flush=True)
 
 
-def clear():
-    # funcion para limpiar la consola
-    # dependiendo del sistema operativo se usa el comando corespondiente 
-    
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
+
 
 def invalido():
     clear()

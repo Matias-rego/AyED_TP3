@@ -15,20 +15,23 @@ class Estudiantes:
         self.ciudad = ""
         self.fecha = ""
 
-    def Format_Estudiante(self):
-        self.id             = str(self.id).ljust(4," ")
-        self.email          = self.email.ljust(32," ")
-        self.contraseña     =self.contraseña.ljust(32," ")
-        self.name           =self.name.ljust(32," ")
-        self.materia_fav    =self.materia_fav.ljust(13," ")
-        self.bio            =self.bio.ljust(255," ")
-        self.pais           =self.pais.ljust(32," ")
-        self.ciudad         =self.ciudad.ljust(32," ")
-        self.fecha          = self.fecha.ljust(10," ")
-        #self.materiafuerte = self.materiafuerte.ljust(16, " ")
-        #self.materiadebil  = self.materiadebil.ljust(16,"")
-        #self.deporte=self.deporte.ljust(16," ")
         
+def Format_Estudiante(x):
+    x.id             = str(x.id).ljust(4," ")
+    x.email          = x.email.ljust(32," ")
+    x.contraseña     = x.contraseña.ljust(32," ")
+    x.name           = x.name.ljust(32," ")
+    x.materia_fav    = x.materia_fav.ljust(13," ")
+    x.bio            = x.bio.ljust(255," ")
+    x.pais           = x.pais.ljust(32," ")
+    x.ciudad         = x.ciudad.ljust(32," ")
+    x.fecha          = x.fecha.ljust(10," ")
+    #x.materiafuerte = x.materiafuerte.ljust(16, " ")
+    #x.materiadebil  = x.materiadebil.ljust(16,"")
+    #x.deporte=x.deporte.ljust(16," ")
+
+
+
 class Moderadores:
     def __init__(self) -> None:
         self.id         = 0
@@ -37,12 +40,12 @@ class Moderadores:
         self.name       = ""
         self.estado     = False
 
-    def Format_Mods(self):
-        self.id         =str(self.id)
-        self.id         = self.id.ljust(4," ")
-        self.email      = self.email.ljust(32," ")
-        self.contraseña =self.contraseña.ljust(32," ")
-        self.name       = self.name.ljust(32," ")
+def Format_Mods(x):
+    x.id         =str(x.id)
+    x.id         = x.id.ljust(4," ")
+    x.email      = x.email.ljust(32," ")
+    x.contraseña =x.contraseña.ljust(32," ")
+    x.name       = x.name.ljust(32," ")
 
 
          
@@ -52,19 +55,27 @@ class Administradores:
         self.email=""
         self.contraseña=""
         
-    def Format_Admins(self):
-        self.id         =str(self.id).ljust(4," ")
-        self.email      =self.email.ljust(32," ")
-        self.contraseña =self.contraseña.ljust(32," ")
+
+
+def Format_Admins(x):
+    x.id         =str(x.id).ljust(4," ")
+    x.email      =x.email.ljust(32," ")
+    x.contraseña =x.contraseña.ljust(32," ")
+
+
 
 class Likes:
     def __init__(self) -> None:
         self.remitente=0
         self.destinatario = 0
         
-    def Format_likes(self):
-        self.remitente      = str(self.remitente).ljust(4," ")
-        self.destinatario   = str(self.destinatario).ljust(4," ")
+
+
+def Format_likes(x):
+    x.remitente      = str(x.remitente).ljust(4," ")
+    x.destinatario   = str(x.destinatario).ljust(4," ")
+
+
 
 class Reportes:
     def __init__(self) -> None:
@@ -72,7 +83,10 @@ class Reportes:
         self.id_reportado=0
         self.razon=""
         self.estado=False
-    def Format_Reportes(self):
-        self.id_reportado  = str(self.id_reportado).ljust(4," ")
-        self.id_reportante = str(self.id_reportante).ljust(4," ")
-        self.razon         = self.razon.ljust(255," ")
+
+
+
+def Format_Reportes(x):
+    x.id_reportado  = str(x.id_reportado).ljust(4," ")
+    x.id_reportante = str(x.id_reportante).ljust(4," ")
+    x.razon         = x.razon.ljust(255," ")
