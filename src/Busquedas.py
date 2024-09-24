@@ -178,5 +178,7 @@ def cerrar_programa():
 ########     ########     ########
 #######       ########       #######
 #######       ########       #######""")
+
 if  "__main__" == __name__:
     abrir_archivos()
+    cerrar_programa()
