@@ -19,9 +19,10 @@ else:
         from getch import getch
 
     except ImportError:
-        print("eror")
-    
-    
+        print("error de importacion de la libreria getch")
+        os.system("pip install getch")
+        from getch import getch
+  
 
 VACIO    = "\033[0;m"
 ROJO     = "\033[1;31m"
@@ -32,30 +33,6 @@ VIOLTEA  = "\033[1;35m" #Administrador
 CIAN     = "\033[1;36m" #Moderador
 BLANCO   = "\033[1;37m"
 DELAY    = 0.025
-
-# # https://stackoverflow.com/questions/35805078/how-do-i-convert-a-password-into-asterisks-while-it-is-being-entered/52636454#52636454
-# # encontramos en stackoverflow este codigo que soluciona el tema de los asterisco
-
-# try:
-#     from msvcrt import getch 
-#     def getpass(prompt,char="*"):
-#         print(prompt, end='', flush=True)
-#         buf = b''
-#         ch = ""
-#         while ch != b'\n' and ch != b'\r' and ch != b'\r\n' and ch != b'\x03':
-#             ch = getch()
-#             if ch == b'\n' or ch == b'\r' or ch == b'\r\n' or ch == b'\x03':
-#                 print('')
-#             elif ch == b'\x08' or ch == b'\x7f': # Backspace
-#                 buf = buf[:-1]
-#                 print(f'\r{(len(prompt)+len(buf)+1)*" "}\r{prompt}{char * len(buf)}', end='', flush=True)
-#             else:
-#                 buf += ch
-#                 print(char, end='', flush=True)
-#         return buf.decode(encoding='iso8859-1')
-
-# except ImportError:
-#     from getpass import getpass  
 
 
 def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO):
@@ -118,33 +95,48 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
     clear()
     return preopc
 
-def getpass(ver = 1):
-    print("ingrese su contraseña de 6 a 16 caracteres:\n(con tap haces visible la contraseña)")
-    ojo= ["(---)","(<o>)"]
+def getpass(ver = False, cartel =True):
+    if cartel: 
+        print("ingrese su contraseña de 6 a 16 caracteres:\n(con tap haces visible la contraseña)\n")
     password = b''
-    men = " m"
-    print(" "+ojo[ver]+" >>>", end="\r", flush=True)
+    print(BLANCO+" (---) "+VERDE+">>"+" "*18+"<<", end="\r", flush=True)
     ch = ""
     while ch != b"\r":
         ch = getch()
+        men = " "
         
         if ch == b"\r":
-            men = "enter"
+            if len(password) < 6:
+                men = "El minimo de la contraseña es de 6 caracteres"
+                ch = b""
+
+        elif ch == b" ":
+            men = "La contraseña no puede contener espacios"
             
         elif ch == b"\t":
-            men = "tap"
+            ver = not ver
             
         elif ch == b"\b":
-            men = "borrar"
+            p = b""
+            for i in range(0,len(password)-1):
+                p += bytes([password[i]])
+            password = p
+            men = " "
         
         else:
-            men = ch.decode(encoding='iso8859-1') + " " + str(ch) 
+            if len(password) != 16:
+                password += ch
+            else:
+                men = "El maximo de la contraseña es de 16 caracteres"
                       
+        if ver:
+            print(BLANCO+" (<o>) "+VERDE+">> "+VACIO+password.ljust(16,b" ").decode(encoding='iso8859-1') +VERDE+ " << " +AMARILLO+men.ljust(50," "), end="\r", flush=True)
         
-        print(" "+ojo[ver]+" >>> "+password.ljust(16,b" ").decode(encoding='iso8859-1')+ " " +men.ljust(50," "), end="\r", flush=True)
-
-
-
+        else:
+            l = len(password)
+            print(BLANCO+" (---) "+VERDE+">> "+VACIO+l*"*"+(16-l)*" "+VERDE+ " << " +AMARILLO+men.ljust(50," "), end="\r", flush=True)
+    print(VACIO)
+    return password.ljust(16,b" ").decode(encoding='iso8859-1')
 
 def invalido():
     clear()
@@ -153,7 +145,8 @@ def invalido():
 def construcción():
     clear()
     cartel("En Construcción... ", AMARILLO)
-    getpass("Oprima enter para volver al menu anterior\n", '')
+    print("Oprima enter para volver al menu anterior\n", end="")
+    getch()
     clear()
     
 def cartel(text = "", color = VACIO):
@@ -176,7 +169,7 @@ def cartel(text = "", color = VACIO):
     
 
 if __name__ == "__main__":
-    getpass()
+    
     # opc = menu("Menu principal", opcs=[
     # "1. Gestionar mi perfil.",
     # "2. Gestionar candidatos.",
@@ -188,3 +181,4 @@ if __name__ == "__main__":
     # "8. Opcion8",
     # "9. Opcion9",
     # "0. Salir."]) 
+    print(getpass())

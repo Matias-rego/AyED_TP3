@@ -1,10 +1,7 @@
-#reputo
 import os
 import pickle
 from consola import * 
 from registros import * 
-import getpass
-
 
 ruta_estudiantes     = "src/archivos/estudiantes.dat"
 ruta_moderadores     = "src/archivos/moderadores.dat"
@@ -26,7 +23,7 @@ def abrir_archivos():
         logico_moderadores = open(ruta_moderadores, "r+b")
     else:
         logico_moderadores = open(ruta_moderadores, "w+b")
-        # regis_mod()
+
         
     if os.path.exists (ruta_administradores):
         logico_administradores = open(ruta_administradores, "r+b")
@@ -152,6 +149,34 @@ def pre_usuario():
         usuariogenerico.Format_Estudiante()
         logico_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, logico_estudiantes)
-        
+
+def cerrar_programa():
+    
+    global logico_estudiantes, logico_moderadores, logico_administradores, logico_likes, logico_reportes
+    
+    logico_estudiantes.close()
+    logico_moderadores.close()
+    logico_administradores.close()
+    logico_likes.close()
+    logico_reportes.close()
+    
+    print("           \033[1;37mFin del programa           ")
+    print("       \033[1;37mGracias por visitarnos.         \n\033[0;m")
+
+    print("""########       ########       ########
+#######       ########       #######
+########     ########     ########
+#########   ########   #########         
+    ##########################            Programa hecho por:
+        ##################               
+######################################        -Nicolás Fossati
+######################################        -Matias Miguel Angel Rego
+######################################        -Marcos Banducci
+        ####################                 -Tomas Agusti
+    ############################
+#########   ########   #########
+########     ########     ########
+#######       ########       #######
+#######       ########       #######""")
 if  "__main__" == __name__:
     abrir_archivos()
