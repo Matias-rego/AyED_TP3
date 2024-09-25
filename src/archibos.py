@@ -1,5 +1,6 @@
 import os
 import pickle
+import random
 from consola import * 
 from registros import * 
 
@@ -113,40 +114,25 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
     getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
-def pr_reg_us():
-    vr = pickle.load(logico_estudiantes)
-    id = 0
-    vr.id = id + 1
-    vr.email = ""
-    vr.contraseña = ""
-    vr.name = ""
-    vr.sexo = ""
-    vr.estado = True
-    vr.materia_fav = ""
-    vr.bio =""
-    vr.pais =""
-    vr.ciudad =""
-    vr.fecha = ""
-
-
 def pre_usuario():
     usuariogenerico = Estudiantes() # type: ignore
-    id = 0
     for i in range(4):
-        usuariogenerico.id = id + 1
-        usuariogenerico.email = ""
-        usuariogenerico.contraseña = ""
-        usuariogenerico.name = ""
-        usuariogenerico.sexo = ""
+        usuariogenerico.id = i
+        usuariogenerico.email = f"estudiante{i+1}@ayed.com"
+        usuariogenerico.contraseña = str(i)*3+str(i+1)*3
+        usuariogenerico.name = f"estudiante{i+1}"
+        usuariogenerico.sexo = "m" if random.randint(0,1) else "s"
         usuariogenerico.estado = True
-        usuariogenerico.materia_fav = ""
-        usuariogenerico.bio =""
-        usuariogenerico.pais =""
-        usuariogenerico.ciudad =""
-        usuariogenerico.fecha = ""
-        usuariogenerico.Format_Estudiante()
+        usuariogenerico.materia_fav = "Algoritmos y Estructuras de Datos"
+        usuariogenerico.bio = ""
+        usuariogenerico.pais = "Argentina"
+        usuariogenerico.ciudad = "Rosario"
+        usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
+        Format_Estudiante(usuariogenerico)
         logico_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, logico_estudiantes)
+        logico_estudiantes.flush()
+        
 
 def cerrar_programa():
     

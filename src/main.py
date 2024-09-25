@@ -18,7 +18,7 @@ from random import randint
 from consola import * 
 
 
-    
+
 #type:
 #   M_8x8_str = array[0..7,0..7] of String
 #   M_2x4_str   = array[0..1,0..4] of String
@@ -32,7 +32,7 @@ from consola import *
 # M_2x4_str: moderadores
 # M_8x8_int: likes, reportes_s
 
-# datos 
+# datos
 
 
 
@@ -53,8 +53,6 @@ def inicialización(likes, estudiantes, moderadores):
     # Var
     # Entero:i,j
     # String: opc
-    
-    
     
     for i in range(0,8):
         for j in range(0,8):
@@ -95,31 +93,6 @@ def inicialización(likes, estudiantes, moderadores):
         i += 1
     clear()
 
-
-def validar_fecha():
-    # Var:
-    # String: fecha_nacimiento
-    # Bool: ok
-    ok = True
-    while ok:
-        try:
-            print("\033[1;34m--------------------------------------")     
-            print("|\033[0;m \033[1;37mIntroduzca su fecha de nacimiento  \033[1;34m|")
-            print("|\033[0;m       \033[1;37mEn formato YYYY/MM/DD        \033[1;34m|")
-            print("--------------------------------------\033[0;m\n")
-            fecha_nacimiento = input("\n\033[1;34m>>> \033[0;m")
-            
-            if datetime.strptime(fecha_nacimiento, "%Y/%m/%d") < datetime.now():
-                clear()
-                print("Fecha válida")
-                ok = False
-            else:
-                clear() 
-                print("Fecha inválida") 
-        except:
-            clear()
-            print("Fecha inválida")
-    return fecha_nacimiento
 
 def calcular_edad(fecha_nacimiento):
     # (fecha_macimiento: str)

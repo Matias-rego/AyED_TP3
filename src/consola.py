@@ -1,5 +1,6 @@
 # Funciones esteticas
 
+from datetime import datetime
 import os
 import time
 from msvcrt import getch 
@@ -34,6 +35,28 @@ CIAN     = "\033[1;36m" #Moderador
 BLANCO   = "\033[1;37m"
 DELAY    = 0.025
 
+def validar_fecha():
+    # Var:
+    # String: fecha_nacimiento
+    # Bool: ok
+    valida = False      
+    cartel("      Introduzca su fecha de nacimiento          En formato YYYY/MM/DD", AZUL)
+    while not valida:
+        
+        try:
+            fecha_nacimiento = input("\n\033[1;34m>>> \033[0;m")
+            
+            if datetime.strptime(fecha_nacimiento, "%Y/%m/%d") < datetime.now():
+                clear()
+                print("Fecha válida")
+                ok = False
+            else:
+                clear() 
+                print("Fecha inválida") 
+        except:
+            clear()
+            print("Fecha inválida")
+    return fecha_nacimiento
 
 def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO):
     
@@ -181,4 +204,6 @@ if __name__ == "__main__":
     # "8. Opcion8",
     # "9. Opcion9",
     # "0. Salir."]) 
-    print(getpass())
+    # print(getpass())
+    
+    validar_fecha()
