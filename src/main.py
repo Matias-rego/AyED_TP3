@@ -100,6 +100,7 @@ def is_login(email,password):
     # Var
     # Entero:i
     #Hacer busqueda en archivos.
+    global logico_estudiantes, logico_moderadores, logico_administradores, ruta_administradores
     busca_estud_email(email)
         
     if logico_estudiantes.email == email and logico_estudiantes.contraseña == password and logico_estudiantes.estado == True:
@@ -153,7 +154,7 @@ def deshabilitar_estud(estudiantes,id,text= "      ¿Desea eliminar su perfil?  
 
 # menus prinsipales de nivel 1
 
-def menu_logueo(estudiantes,moderadores):
+def menu_logueo():
     # (estudiantes: M_8x8_str, moderadores: M_2x4_str,)
     # Var
     # Entero: login_e, intentos
@@ -175,8 +176,8 @@ def menu_logueo(estudiantes,moderadores):
             print("Intente nuevamente\n")
     
         email = input("email:\n\033[1;34m>>> \033[0;m")
-        print("\nIngrese su contraseña:")
-        password = getpass("\033[1;34m>>> \033[0;m","*")
+        print()
+        password = getpass()
         
         login_e = is_login(email,password) 
 
@@ -827,16 +828,17 @@ def menu_reportes(estudiantes, reportes_s, reportes_m):
             getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
+abrir_archivos()
 
 opc = ""
 while opc!="0":
     clear()    
     # Mostramos el menu de login
     opc = menu("Menu Loguearse","",[
-        "1 Loguearse.",
-        "2 Registrarse.",
-        "3 Bonus tracks.",
-        "0 Salir.",
+        "1. Loguearse.",
+        "2. Registrarse.",
+        "3. Bonus tracks.",
+        "0. Salir.",
         "","","","","",""],
         AZUL)
 

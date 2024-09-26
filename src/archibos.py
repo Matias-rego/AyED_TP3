@@ -115,6 +115,7 @@ def busca_estud_id(id):
         return pos
 
 def busca_estud_email(email):
+    global logico_estudiantes,ruta_estudiantes
     t=os.path.getsize(ruta_estudiantes)
     if t!=0:
         logico_estudiantes.seek(0,0)
@@ -133,6 +134,7 @@ def busca_estud_email(email):
     return pos
 
 def busca_mod_email(email):
+    global logico_moderadores, ruta_moderadores
     t=os.path.getsize(ruta_moderadores)
     if t!=0:
         logico_moderadores.seek(0,0)
