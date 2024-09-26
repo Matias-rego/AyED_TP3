@@ -59,7 +59,7 @@ def pre_usuario():
         usuariogenerico.pais = "Argentina"
         usuariogenerico.ciudad = "Rosario"
         usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
-        Format_estudiante(usuariogenerico)
+        Format_Estudiante(usuariogenerico)
         logico_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, logico_estudiantes)
         logico_estudiantes.flush()
