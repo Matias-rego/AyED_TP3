@@ -15,7 +15,9 @@
 from datetime import datetime
 import os
 from random import randint
+from archibos import *
 from consola import * 
+from bonus import bonus
 
 
 
@@ -48,50 +50,7 @@ reportes_m  = [[""]*8 for _ in range(0,8)]
 
 
 # funciones de datos
-def inicialización(likes, estudiantes, moderadores):
-    #(likes: M_8x8_int, estudiantes: M_8x8_str, moderadores: M_8x8_str)
-    # Var
-    # Entero:i,j
-    # String: opc
-    
-    for i in range(0,8):
-        for j in range(0,8):
-            if i != j:
-                likes[i][j] = randint(0,1)
-            else:
-                likes[i][j] = 0
 
-    for i in range(0,4):
-        menu_registrarse(moderadores, estudiantes,"   Ingrese el "+str(i+1)+"° usuario inicial:   ",False) 
-        
-    opc = "si"
-    i = 0
-    
-    clear()
-    
-    while opc != "no" and i<4:
-        
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m\033[1;37m Ingrese los datos del "+str(i+1)+"° moderador:\033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        
-        email = input("Ingrese el email del moderador: \n\033[1;34m>>> \033[0;m")
-
-        while busca_estud(estudiantes,email,0)>=0 or busca_mod(moderadores,email)>=0 :
-            invalido()
-            email = input("\n\033[1;34m>>> \033[0;m")
-        moderadores[i][0] = email
-        moderadores[i][1] = input("\nIngrese la contraseña del moderador: \n\033[1;34m>>> \033[0;m")
-        if i < 3:
-            opc = input("Desea ingresar otro moderador?\n(si/no): \033[1;34m>>> \033[0;m")
-            clear()
-            while opc != "si" and opc != "no":
-                invalido()
-                opc = input("Desea ingresar otro moderador?\n(si/no): \033[1;34m>>> \033[0;m")
-        
-            
-        i += 1
-    clear()
 
 
 def calcular_edad(fecha_nacimiento):
@@ -136,30 +95,37 @@ def busca_mod(mod,dato):#YA PASADA
     else: 
         return -1
     
-def is_login(email,password,user1,user2):
-    # (email:str, password:str, user1: M_8x8_str, user2: M_2x4_str)
+def is_login(email,password):
+    # (email:str, password:str)
     # Var
     # Entero:i
-    
-    if email != "" and password != "":
-        i = 0
-        while not (user1[i][0] == email and user1[i][1] == password and user1[i][2] == "ACTIVO") and i != 7: 
-            i += 1
-            
-        if user1[i][0] == email and user1[i][1] == password:
-            return i
+    #Hacer busqueda en archivos.
+    busca_estud_email(email)
         
-        else:
-            i = 0
-            while not (user2[i][0] == email and user2[i][1] == password) and i != 3: 
-                i += 1
-                
-            if user2[i][0] == email and user2[i][1] == password:
-                return i + 8
-            else:
-                return -1
+    if logico_estudiantes.email == email and logico_estudiantes.contraseña == password and logico_estudiantes.estado == True:
+        return "estud"
+    
     else:
-        return -1
+        busca_mod_email(email)
+            
+        if logico_moderadores.email == email and logico_moderadores.contraseña == password and logico_moderadores.estado == True:
+            return "mod"
+        else:
+            t=os.path.getsize(ruta_administradores)
+
+            logico_administradores.seek(0,0)
+            pp=0
+            vr=pickle.load(logico_administradores)
+            while logico_administradores.tell()<t and id!=vr.email:
+                pp=logico_administradores.tell()
+                vr=pickle.load(logico_administradores)
+            if logico_administradores.email == email and logico_administradores.contraseña == password:
+                return "admin"
+            else:
+                return "inválido"
+            
+            
+
 
 def deshabilitar_estud(estudiantes,id,text= "      ¿Desea eliminar su perfil?    "):
     #(estudiantes: M_8x8_str, id: int, text: srt)
@@ -197,10 +163,9 @@ def menu_logueo(estudiantes,moderadores):
     
     while login_e == -1 and intentos > 0:
         clear()
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m           \033[1;37mInicio de sesion         \033[1;34m|")
-        print("--------------------------------------\033[0;m")
         
+        cartel("Inicio de sesion", AZUL)
+
         if intentos == 3:
             print("Ingrese sus credenciales.\n")
             
@@ -213,18 +178,16 @@ def menu_logueo(estudiantes,moderadores):
         print("\nIngrese su contraseña:")
         password = getpass("\033[1;34m>>> \033[0;m","*")
         
-        login_e = is_login(email,password,estudiantes,moderadores) 
-    
-        if login_e == -1:
-            intentos -= 1
+        login_e = is_login(email,password) 
+
+        match login_e:
+            case "inválido": intentos -= 1
+            case "estud": menu_estudiante()
+            case "mod": menu_moderadore()
+            case "admin": menu_administradore()
             
     clear()
-    
-    if intentos==0:
-        
-        print("\033[1;31m     Demasiados intentos incorrectos\033[0;m")
-        
-    return login_e
+    return intentos
 
 def menu_estudiante(estudiantes, id, likes, reportes_s, reportes_m):
     # (estudiantes: M_8x8_str, id: int,likes: M_8x8_int, reportes_s: M_8x8_int, reportes_m: M_8x8_str)
@@ -253,7 +216,7 @@ def menu_estudiante(estudiantes, id, likes, reportes_s, reportes_m):
             case "0": pass
             case  _ : invalido()
 
-def menu_moderadores(estudiantes, reportes_s, reportes_m):
+def menu_moderadore(estudiantes, reportes_s, reportes_m):
     # (estudiantes: M_8x8_str, reportes_s: M_8x8_int, reportes_m: M_8x8_str)
     # Var
     # String: opc
@@ -277,6 +240,9 @@ def menu_moderadores(estudiantes, reportes_s, reportes_m):
             case "3": construcción()
             case "0": pass
             case  _ : invalido()
+            
+def menu_administradore():
+    pass
 
 def menu_registrarse(moderadores,estudiantes,text="         Registrar usuario          ",ispassword =True):
     # (moderadores: M_2x4_str, estudiantes: M_8x8_str, text: str, ispassword: bool)
@@ -861,125 +827,29 @@ def menu_reportes(estudiantes, reportes_s, reportes_m):
             getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
-def bonus(estudiantes):
-    # (estudiantes: M_8x8_str)
-    # var: 
-    # String: opc
-    opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
-    
-    while opc!="0":
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m        \033[1;37mBonus Tracks                \033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        print("\033[1;37m1\033[0;m. Bonus Track 1")
-        print("\033[1;37m2\033[0;m. Bonus Track 2")
-        print("\033[1;37m0\033[0;m. Volver.")
-        
-        opc = input("\n\033[1;34m>>> \033[0;m")
-
-        clear()  
-        match opc:
-            case "1": track_1()            
-            case "2": track_2(estudiantes)            
-            case "0": clear()
-            case  _ : invalido()
-
-def ordenamiento(x):
-    # (x: M_6_int)
-    # var:
-    # enteros: i, j, aux 
-    
-    aux = 0
-    for i in range(0,5):
-        for j in range(i+1, 6):
-            if x[i] > x[j]:
-                aux = x[i]
-                x[i] = x[j]
-                x[j] = aux
-            
-def track_1():
-    # var:
-    # enteros: i
-    # array: edades, edades2
-    
-    edades = [0]*6
-    edades[0] = 21
-    edades[1] = 18
-    edades[2] = 20
-    edades[3] = 19
-    edades[4] = 23
-    edades[5] = 24
-    
-    print("Las edades desordenadas son:")
-    for i in range(0,6):
-        print(edades[i], end=", ")
-
-    ordenamiento(edades)
-    
-    print("\nLas edades ordenadas serian:")
-    for i in range(0,6):
-        print(edades[i], end=", ")
-        
-    for i in range(0,5):
-        if edades[i + 1] != edades[i] + 1:
-            print("\ny los huecos estan entre la posicion", i, "y la posicion", i+1, "y el numero faltante es", edades[i] + 1)
-            
-    getpass("\noprima enter para volver al menu anterior\n", '')
-    clear()
-
-def track_2(estudiantes):
-    # (estudiantes: M_8x8_str)
-    # var:
-    # enteros: c_est, matcheos, i  
-
-    c_est = 0
-    for i in range(0,8):
-        if estudiantes[i][2] == "ACTIVO":
-            c_est += 1
-         
-    matcheos = c_est * c_est - c_est
-
-    if matcheos == 0:
-        print("No hay match debido a que todos los usuarios estan inactivos.")
-    
-    else:
-        print(f"Existen {matcheos} matcheos posibles")   
-    
-    getpass("oprima enter para volver al menu anterior\n", '')
-    clear()
-
-inicialización(likes,estudiantes,moderadores)
-clear()
 
 opc = ""
 while opc!="0":
-        
+    clear()    
     # Mostramos el menu de login
-    print("\033[1;34m--------------------------------------")     
-    print("|\033[0;m            \033[1;37mMenu Loguearse           \033[1;34m|")
-    print("--------------------------------------\033[0;m\n")
-    print("\033[1;37m1\033[0;m. Loguearse.")
-    print("\033[1;37m2\033[0;m. Registrarse.")
-    print("\033[1;37m3\033[0;m. Bonus tracks.")
-    print("\033[1;37m0\033[0;m. Salir.")
-    
-    opc = input("\n\033[1;34m>>> \033[0;m")
+    opc = menu("Menu Loguearse","",[
+        "1 Loguearse.",
+        "2 Registrarse.",
+        "3 Bonus tracks.",
+        "0 Salir.",
+        "","","","","",""],
+        AZUL)
 
-    clear()
     match opc:
         
-        case "1":
-            id = menu_logueo(estudiantes,moderadores)
-            if id == -1: opc = "0"
-            
-            elif id >= 0 and id < 8: menu_estudiante(estudiantes, id, likes, reportes_s, reportes_m)
-            
-            else: menu_moderadores(estudiantes, reportes_s, reportes_m)
+        case "1": 
+            if menu_logueo()==0: 
+                print(ROJO+"    Demasiados intentos incorrectos.\n Intente mas tarde."+VACIO)
+                opc = "0"
                 
         case "2": menu_registrarse(moderadores,estudiantes)
         case "3": bonus(estudiantes)
         case "0": clear()
         case  _ : invalido()
 
-
-
+cerrar_programa()

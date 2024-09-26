@@ -1,3 +1,5 @@
+#-------------------------------DEFINICION DE CLASES-------------------------------
+#ESTUDIANTES
 class Estudiantes:
     def __init__(self) -> None:
         self.id = 0
@@ -28,9 +30,7 @@ def Format_Estudiante(x):
     #x.materiafuerte = x.materiafuerte.ljust(16, " ")
     #x.materiadebil  = x.materiadebil.ljust(16,"")
     #x.deporte=x.deporte.ljust(16," ")
-    
-
-
+#MODERADORES  
 class Moderadores:
     def __init__(self) -> None:
         self.id         = 0
@@ -46,7 +46,7 @@ def Format_Mods(x):
     x.contraseña =x.contraseña.ljust(32," ")
     x.name       = x.name.ljust(32," ")
 
-         
+#ADMINS        
 class Administradores:
     def __init__(self) -> None:
         self.id=0
@@ -58,17 +58,17 @@ def Format_Admins(x):
     x.email      =x.email.ljust(32," ")
     x.contraseña =x.contraseña.ljust(16," ")
 
-
+#LIKES
 class Likes:
     def __init__(self) -> None:
-        self.remitente=0
+        self.remitente= 0
         self.destinatario = 0
 
 def Format_likes(x):
     x.remitente      = str(x.remitente).ljust(4," ")
     x.destinatario   = str(x.destinatario).ljust(4," ")
 
-
+#REPORTES
 class Reportes:
     def __init__(self) -> None:
         self.id_reportante=0
