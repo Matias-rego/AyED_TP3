@@ -3,13 +3,15 @@ import pickle
 import random
 from consola import * 
 from registros import * 
-
+#------------------------------------------------------------------------------------------------------------------------------#
+#DEFINICION DE RUTAS GENERICAS
 ruta_estudiantes     = "src/archivos/estudiantes.dat"
 ruta_moderadores     = "src/archivos/moderadores.dat"
 ruta_administradores = "src/archivos/administradores.dat"
 ruta_likes           = "src/archivos/likes.dat"
 ruta_reportes        = "src/archivos/reportes.dat"
 
+#APERTURA DE ARCHIVOS AL COMIENZO DEL PROGRAMA, O SU CREACION RESPECTIVAMENTE
 def abrir_archivos():
     
     global logico_estudiantes, logico_moderadores, logico_administradores, logico_likes, logico_reportes
@@ -59,7 +61,7 @@ def pre_usuario():
         usuariogenerico.pais = "Argentina"
         usuariogenerico.ciudad = "Rosario"
         usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
-        Format_estudiante(usuariogenerico)
+        Format_Estudiante(usuariogenerico)
         logico_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, logico_estudiantes)
         logico_estudiantes.flush()

@@ -1,4 +1,4 @@
-#-------------------------------DEFINICION DE CLASES-------------------------------
+#-------------------------------DEFINICION DE CLASES-------------------------------#
 #ESTUDIANTES
 class Estudiantes:
     def __init__(self) -> None:

@@ -23,8 +23,8 @@ else:
         print("error de importacion de la libreria getch")
         os.system("pip install getch")
         from getch import getch
-  
-
+#------------------------------------------------------COLORES----------------------------------------------------------#  
+#COLORES PARA CONSOLA
 VACIO    = "\033[0;m"
 ROJO     = "\033[1;31m"
 VERDE    = "\033[1;32m" 
@@ -33,8 +33,9 @@ AZUL     = "\033[1;34m" #Estudiante y logueo
 VIOLTEA  = "\033[1;35m" #Administrador
 CIAN     = "\033[1;36m" #Moderador
 BLANCO   = "\033[1;37m"
-DELAY    = 0.025
-
+DELAY    = 0.025        #DELAY UTILIZADO PARA LAS ANIMACIONES DE PRESENTACION DE MENUS
+#--------------------------------------------FUNCIONES VARIAS--------------------------------------------------#
+#FUNCION PARA VALIDAR LA FECHA DE NACIMIENTO
 def validar_fecha():
     # Var:
     # String: fecha_nacimiento
@@ -57,7 +58,7 @@ def validar_fecha():
             clear()
             print("Fecha inválida")
     return fecha_nacimiento
-
+#FUNCION QUE AUTOGENERA MENUS, PASANDOLE EL TEXTO REQUERIDO
 def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO):
     
     copc = 0
@@ -117,7 +118,7 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
     print(VACIO)
     clear()
     return preopc
-
+#FUNCION PARA VALIDAR CONTRASEÑA, SEGUN LOS PARAMETROS DADOS
 def getpass(ver = False, cartel =True):
     if cartel: 
         print("ingrese su contraseña de 6 a 16 caracteres:\n(con tap haces visible la contraseña)\n")
@@ -164,14 +165,14 @@ def getpass(ver = False, cartel =True):
 def invalido():
     clear()
     print("\033[1;31mDato Invalido, ingreselo de nuevo\033[0;m")
-
+#FUNCION PARA LOS APARTADOS EN CONSTRUCCION(GENERA EL CARTEL Y EL MENSAJE)
 def construcción():
     clear()
     cartel("En Construcción... ", AMARILLO)
     print("Oprima enter para volver al menu anterior\n", end="")
     getch()
     clear()
-    
+#FUNCION QUE CREA UN CARTEL AL REDEDOR DEL NOMBRE DEL MENU
 def cartel(text = "", color = VACIO):
     
     print(color+"╔"+"═"*48+"╗")
