@@ -38,7 +38,7 @@ def abrir_archivos():
         logico_likes = open(ruta_likes, "r+b")
     else:
         logico_likes = open(ruta_likes, "w+b")
-        pre_likes()
+        pre_random_likes()
         
     if os.path.exists (ruta_reportes):
         logico_reportes = open(ruta_reportes, "r+b")
@@ -91,9 +91,31 @@ def pre_admin():
     logico_administradores.flush()
     
 #LIKES ALEATORIOS PRECARGADOS
-def pre_likes():
-    
-    pass
+def pre_random_likes():
+    t=os.path.getsize(ruta_estudiantes)
+    logico_estudiantes.seek(0,0)
+    logico_likes.seek(0,2)
+    vl=pickle.load(logico_likes)
+    aux=pickle.load(logico_estudiantes)
+    x=logico_estudiantes.tell()
+    cant=t//x
+    for i in range (cant):
+        logico_estudiantes.seek(x*i)
+        vr=pickle.load(logico_estudiantes)
+        vl.remitente=vr.id
+        
+        for j in range(cant-1):
+            bandera=random.randint(0,1)
+            logico_estudiantes.seek(x*j,0)
+            vr2=pickle.load(logico_estudiantes)
+            if bandera==1:
+                vl.destinatario=vr.id
+            logico_likes.seek(0,2)
+            pickle.dump()    
+                
+              
+
+
 
 #----------------------------------------------------------------------------------------------------------------------------# 
 #BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      

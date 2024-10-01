@@ -30,6 +30,7 @@ def Format_Estudiante(x):
     #x.materiafuerte = x.materiafuerte.ljust(16, " ")
     #x.materiadebil  = x.materiadebil.ljust(16,"")
     #x.deporte=x.deporte.ljust(16," ")
+    
 #MODERADORES  
 class Moderadores:
     def __init__(self) -> None:
