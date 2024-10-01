@@ -5,45 +5,52 @@ from consola import *
 from registros import * 
 #------------------------------------------------------------------------------------------------------------------------------#
 #DEFINICION DE RUTAS GENERICAS
-ruta_estudiantes     = "src/archivos/estudiantes.dat"
-ruta_moderadores     = "src/archivos/moderadores.dat"
-ruta_administradores = "src/archivos/administradores.dat"
-ruta_likes           = "src/archivos/likes.dat"
-ruta_reportes        = "src/archivos/reportes.dat"
+r_estudiantes     = "src/archivos/estudiantes.dat"
+r_moderadores     = "src/archivos/moderadores.dat"
+r_administradores = "src/archivos/administradores.dat"
+r_likes           = "src/archivos/likes.dat"
+r_reportes        = "src/archivos/reportes.dat"
+
 
 #APERTURA DE ARCHIVOS AL COMIENZO DEL PROGRAMA, O SU CREACION RESPECTIVAMENTE
 def abrir_archivos():
     
-    global logico_estudiantes, logico_moderadores, logico_administradores, logico_likes, logico_reportes
-     
-    if os.path.exists (ruta_estudiantes):
-        logico_estudiantes = open(ruta_estudiantes, "r+b")
+    global estudiante, moderadore, administradore, like, reporte, l_estudiantes, l_moderadores, l_administradores, l_likes, l_reportes
+
+    estudiante = Estudiantes()
+    moderadore = Moderadores()
+    administradore = Administradores()
+    like = Likes()
+    reporte = Reportes()
+    
+    if os.path.exists (r_estudiantes):
+        l_estudiantes = open(r_estudiantes, "r+b")
     else:
-        logico_estudiantes = open(ruta_estudiantes, "w+b")
+        l_estudiantes = open(r_estudiantes, "w+b")
         pre_usuario()
         
-    if os.path.exists (ruta_moderadores):
-        logico_moderadores = open(ruta_moderadores, "r+b")
+    if os.path.exists (r_moderadores):
+        l_moderadores = open(r_moderadores, "r+b")
     else:
-        logico_moderadores = open(ruta_moderadores, "w+b")
+        l_moderadores = open(r_moderadores, "w+b")
         pre_mod()
         
-    if os.path.exists (ruta_administradores):
-        logico_administradores = open(ruta_administradores, "r+b")
+    if os.path.exists (r_administradores):
+        l_administradores = open(r_administradores, "r+b")
     else:
-        logico_administradores = open(ruta_administradores, "w+b")
+        l_administradores = open(r_administradores, "w+b")
         pre_admin()
         
-    if os.path.exists (ruta_likes):
-        logico_likes = open(ruta_likes, "r+b")
+    if os.path.exists (r_likes):
+        l_likes = open(r_likes, "r+b")
     else:
-        logico_likes = open(ruta_likes, "w+b")
+        l_likes = open(r_likes, "w+b")
         pre_likes()
         
-    if os.path.exists (ruta_reportes):
-        logico_reportes = open(ruta_reportes, "r+b")
+    if os.path.exists (r_reportes):
+        l_reportes = open(r_reportes, "r+b")
     else:
-        logico_reportes = open(ruta_reportes, "w+b")
+        l_reportes = open(r_reportes, "w+b")
         
 #----------------------------------------------------------------------------------------------------------------------------#  
 # USUARIOS PRECARGADOS 
@@ -62,9 +69,9 @@ def pre_usuario():
         usuariogenerico.ciudad = "Rosario"
         usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
         Format_Estudiante(usuariogenerico)
-        logico_estudiantes.seek(0,2)
-        pickle.dump(usuariogenerico, logico_estudiantes)
-        logico_estudiantes.flush()
+        l_estudiantes.seek(0,2)
+        pickle.dump(usuariogenerico, l_estudiantes)
+        l_estudiantes.flush()
 
 #MODERADOR PRECARGADO
 def pre_mod():
@@ -75,9 +82,9 @@ def pre_mod():
     mods.name = "Moderador_1"
     mods.estado = True
     Format_Mods(mods)
-    logico_moderadores.seek(0,2)
-    pickle.dump(mods, logico_moderadores)
-    logico_moderadores.flush()
+    l_moderadores.seek(0,2)
+    pickle.dump(mods, l_moderadores)
+    l_moderadores.flush()
 
 #ADMIN PRECARGADO
 def pre_admin():
@@ -86,9 +93,9 @@ def pre_admin():
     admin.email = "Adminpre@ayed.com"
     admin.contraseña = "000000"
     Format_Admins(admin)
-    logico_administradores.seek(0,2)
-    pickle.dump(admin, logico_administradores)
-    logico_administradores.flush()
+    l_administradores.seek(0,2)
+    pickle.dump(admin, l_administradores)
+    l_administradores.flush()
     
 #LIKES ALEATORIOS PRECARGADOS
 def pre_likes():
@@ -98,57 +105,55 @@ def pre_likes():
 #----------------------------------------------------------------------------------------------------------------------------# 
 #BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      
 def busca_estud_id(id):
-        t=os.path.getsize(ruta_estudiantes)
-        if t!=0:
-            logico_estudiantes.seek(0,0)
-            pp=0
-            vr=pickle.load(logico_estudiantes)
-            while logico_estudiantes.tell()<t and id!=vr.id:
-                pp=logico_estudiantes.tell()
-                vr=pickle.load(logico_estudiantes)
-            if id==vr.id:
-                pos=pp
-            else:
-                pos=-1
-        else:
-            pos=-1
-        return pos
+    
+    t=os.path.getsize(r_estudiantes)
+    
+    l_estudiantes.seek(0,0)
+    pp=0
+    vr=pickle.load(l_estudiantes)
+    while l_estudiantes.tell()<t and id!=vr.id:
+        pp=l_estudiantes.tell()
+        vr=pickle.load(l_estudiantes)
+    if id==vr.id:
+        pos=pp
+    else:
+        pos=-1
+    
+    return pos
 
 def busca_estud_email(email):
-    global logico_estudiantes,ruta_estudiantes
-    t=os.path.getsize(ruta_estudiantes)
-    if t!=0:
-        logico_estudiantes.seek(0,0)
-        pp=0
-        vr=pickle.load(logico_estudiantes)
-        while logico_estudiantes.tell()<t and email!=vr.email:
-            pp=logico_estudiantes.tell()
-            vr=pickle.load(logico_estudiantes)
-        if email==vr.email:
-            pos=pp
-        else:
-            pos=-1
+    global estudiante
+    t=os.path.getsize(r_estudiantes)
+    email = email.ljust(32," ")
+    
+    l_estudiantes.seek(0)
+    pp=0
+    estudiante=pickle.load(l_estudiantes)
+    while l_estudiantes.tell()<t and email!=estudiante.email:
+        pp=l_estudiantes.tell()
+        estudiante=pickle.load(l_estudiantes)
+    if email==estudiante.email:
+        pos=pp
     else:
         pos=-1
     
     return pos
 
 def busca_mod_email(email):
-    global logico_moderadores, ruta_moderadores
-    t=os.path.getsize(ruta_moderadores)
-    if t!=0:
-        logico_moderadores.seek(0,0)
-        pp=0
-        vr=pickle.load(logico_moderadores)
-        while logico_moderadores.tell()<t and id!=vr.email:
-            pp=logico_moderadores.tell()
-            vr=pickle.load(logico_moderadores)
-        if id==vr.email:
-            pos=pp
-        else:
-            pos=-1
+    global l_moderadores, r_moderadores, moderadore
+    t=os.path.getsize(r_moderadores)
+    
+    l_moderadores.seek(0,0)
+    pp=0
+    moderadore=pickle.load(l_moderadores)
+    while l_moderadores.tell()<t and id!=moderadore.email:
+        pp=l_moderadores.tell()
+        moderadore=pickle.load(l_moderadores)
+    if id==moderadore.email:
+        pos=pp
     else:
-        pos=-1  
+        pos=-1
+
     return pos
 #-------------------------------------------------------------------------------------------------------------------------------------------------#
 #BAJA LOGICA
@@ -161,13 +166,13 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
         opc = input(BLANCO)
 
     x=busca_estud_id(id)
-    vr=pickle.load(logico_estudiantes)
-    logico_estudiantes.seek(x,0)
+    vr=pickle.load(l_estudiantes)
+    l_estudiantes.seek(x,0)
     if opc == "si" :
         vr.estado = "INACTIVO"
         print("Perfil desactivado.")
-        pickle.dump(logico_estudiantes,vr)
-        logico_estudiantes.flush()
+        pickle.dump(l_estudiantes,vr)
+        l_estudiantes.flush()
     else :
         print("Perfil no desactivado.")
     getpass("oprima enter para volver al menu anterior\n", '')
@@ -176,18 +181,18 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
 #CIERRE DE PROGRAMA
 def cerrar_programa():
     
-    global logico_estudiantes, logico_moderadores, logico_administradores, logico_likes, logico_reportes
+    global l_estudiantes, l_moderadores, l_administradores, l_likes, l_reportes
     
-    logico_estudiantes.close()
-    logico_moderadores.close()
-    logico_administradores.close()
-    logico_likes.close()
-    logico_reportes.close()
+    l_estudiantes.close()
+    l_moderadores.close()
+    l_administradores.close()
+    l_likes.close()
+    l_reportes.close()
     
     print("           \033[1;37mFin del programa           ")
     print("       \033[1;37mGracias por visitarnos.         \n\033[0;m")
 
-    print("""########       ########       ########
+    #print("""########       ########       ########
 #######       ########       #######
 ########     ########     ########
 #########   ########   #########         
@@ -205,5 +210,7 @@ def cerrar_programa():
 
 if  "__main__" == __name__:
     abrir_archivos()
+    
+    print(busca_estud_email("estudiante3@ayed.com"))
     
     cerrar_programa()

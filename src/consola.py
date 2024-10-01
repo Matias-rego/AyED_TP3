@@ -121,7 +121,7 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
 #FUNCION PARA VALIDAR CONTRASEÑA, SEGUN LOS PARAMETROS DADOS
 def getpass(ver = False, cartel =True):
     if cartel: 
-        print("ingrese su contraseña de 6 a 16 caracteres:\n(con tap haces visible la contraseña)\n")
+        print("ingrese su contraseña de 6 a 16 caracteres:\n(con tab haces visible la contraseña)\n")
     password = b''
     print(BLANCO+" (---) "+VERDE+">>"+" "*18+"<<", end="\r", flush=True)
     ch = ""

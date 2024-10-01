@@ -11,6 +11,7 @@
 
 
 # importamos los modulos que usamos
+global estudiante, moderadore, administradore, like, reporte, l_estudiantes, l_moderadores, l_administradores, l_likes, l_reportes
 
 from datetime import datetime
 import os
@@ -34,7 +35,6 @@ from bonus import bonus
 # M_2x4_str: moderadores
 # M_8x8_int: likes, reportes_s
 
-# datos
 
 
 
@@ -66,7 +66,7 @@ def calcular_edad(fecha_nacimiento):
     if fecha_actual.month < fecha_nacimiento.month or (fecha_actual.month == fecha_nacimiento.month and fecha_actual.day < fecha_nacimiento.day):
         edad -= 1
     return edad
-
+    
 def busca_estud(estud,dato,tipo):#YA PASADA
     # (estudiantes: M_8x8_str, dato: str, tipo: int)
     # Var
@@ -100,27 +100,34 @@ def is_login(email,password):
     # Var
     # Entero:i
     #Hacer busqueda en archivos.
-    global logico_estudiantes, logico_moderadores, logico_administradores, ruta_administradores
-    busca_estud_email(email)
-        
-    if logico_estudiantes.email == email and logico_estudiantes.contraseña == password and logico_estudiantes.estado == True:
-        return "estud"
     
-    else:
-        busca_mod_email(email)
-            
-        if logico_moderadores.email == email and logico_moderadores.contraseña == password and logico_moderadores.estado == True:
-            return "mod"
-        else:
-            t=os.path.getsize(ruta_administradores)
+    global l_administradores
 
-            logico_administradores.seek(0,0)
+    pos = busca_estud_email(email)
+    if pos != -1:
+        l_estudiantes.seek(pos,0)
+        estudiante = pickle.load(l_estudiantes)
+        
+        if estudiante.email == email and estudiante.contraseña == password and estudiante.estado == True:
+            return "estud"
+    else:
+        
+        pos = busca_mod_email(email)
+        if pos != -1:
+            l_moderadores.seek(pos,0)
+            moderadore = pickle.load(l_moderadores)
+            if moderadore.email == email and moderadore.contraseña == password and moderadore.estado == True:
+                return "mod"
+        else:
+            t=os.path.getsize(r_administradores)
+
+            l_administradores.seek(0)
             pp=0
-            vr=pickle.load(logico_administradores)
-            while logico_administradores.tell()<t and id!=vr.email:
-                pp=logico_administradores.tell()
-                vr=pickle.load(logico_administradores)
-            if logico_administradores.email == email and logico_administradores.contraseña == password:
+            vr=pickle.load(l_administradores)
+            while l_administradores.tell()<t and email!=vr.email:
+                pp=l_administradores.tell()
+                vr=pickle.load(l_administradores)
+            if l_administradores.email == email and l_administradores.contraseña == password:
                 return "admin"
             else:
                 return "inválido"
