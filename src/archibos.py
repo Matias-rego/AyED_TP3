@@ -44,11 +44,11 @@ def abrir_archivos():
     if os.path.exists (r_likes):
         l_likes = open(r_likes, "r+b")
     else:
-        logico_likes = open(ruta_likes, "w+b")
+        l_likes = open(r_likes, "w+b")
         pre_random_likes()
         
-    if os.path.exists (ruta_reportes):
-        logico_reportes = open(ruta_reportes, "r+b")
+    if os.path.exists (r_reportes):
+        l_reportes = open(r_reportes, "r+b")
     else:
         l_reportes = open(r_reportes, "w+b")
         
@@ -99,25 +99,25 @@ def pre_admin():
     
 #LIKES ALEATORIOS PRECARGADOS
 def pre_random_likes():
-    t=os.path.getsize(ruta_estudiantes)
-    logico_estudiantes.seek(0,0)
-    logico_likes.seek(0,2)
-    vl=pickle.load(logico_likes)
-    aux=pickle.load(logico_estudiantes)
-    x=logico_estudiantes.tell()
+    t=os.path.getsize(r_estudiantes)
+    l_estudiantes.seek(0,0)
+    l_likes.seek(0,2)
+    vl=pickle.load(l_likes)
+    aux=pickle.load(l_estudiantes)
+    x=l_estudiantes.tell()
     cant=t//x
     for i in range (cant):
-        logico_estudiantes.seek(x*i)
-        vr=pickle.load(logico_estudiantes)
+        l_estudiantes.seek(x*i)
+        vr=pickle.load(l_estudiantes)
         vl.remitente=vr.id
         
         for j in range(cant-1):
             bandera=random.randint(0,1)
-            logico_estudiantes.seek(x*j,0)
-            vr2=pickle.load(logico_estudiantes)
+            l_estudiantes.seek(x*j,0)
+            vr2=pickle.load(l_estudiantes)
             if bandera==1:
                 vl.destinatario=vr.id
-            logico_likes.seek(0,2)
+            l_likes.seek(0,2)
             pickle.dump()    
                 
               
