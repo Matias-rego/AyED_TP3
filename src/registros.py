@@ -3,12 +3,12 @@
 class Estudiantes:
     def __init__(self) -> None:
         self.id = 0
+        self.estado = False
         self.email = ""
         self.contraseña = ""
         self.name = ""
         self.sexo = ""
         #self.deporte = ""
-        self.estado = False
         self.materia_fav = ""
         # self.materia_fuerte= ""
         # self.materia_debil =""
@@ -22,7 +22,7 @@ def Format_Estudiante(x):
     x.email          = x.email.ljust(32," ")
     x.contraseña     = x.contraseña.ljust(16," ")
     x.name           = x.name.ljust(32," ")
-    x.materia_fav    = x.materia_fav.ljust(13," ")
+    x.materia_fav    = x.materia_fav.ljust(16," ")
     x.bio            = x.bio.ljust(255," ")
     x.pais           = x.pais.ljust(32," ")
     x.ciudad         = x.ciudad.ljust(32," ")
