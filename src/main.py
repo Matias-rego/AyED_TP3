@@ -348,6 +348,7 @@ def busca_estud_email(email):
 def busca_mod_email(email):
     global l_moderadores, r_moderadores, moderador
     t=os.path.getsize(r_moderadores)
+    email = email.ljust(32," ")
     
     l_moderadores.seek(0,0)
     pp=0
@@ -481,7 +482,7 @@ def cerrar_programa():
     print("           \033[1;37mFin del programa           ")
     print("       \033[1;37mGracias por visitarnos.         \n\033[0;m")
 
-    #print("""########       ########       ########
+    print("""########       ########       ########
 #######       ########       #######
 ########     ########     ########
 #########   ########   #########         
@@ -581,9 +582,8 @@ def menu_registrarse(text="<          Registro          >"):
             if email[i]=="@":
                 val += 1   
     #-----------Validacion de existencia unica de email--------------#
-    pos_est=busca_estud_email(email)
-    pos_mod=busca_mod_email(email)
-    while pos_est==-1 or pos_mod==-1:
+    
+    while busca_estud_email(email) !=-1 and busca_mod_email(email) !=-1:
         clear()
         cartel(text,AZUL)
         print("Email ya utlizado.\nIntente con uno nuevo.")
@@ -605,9 +605,7 @@ def menu_registrarse(text="<          Registro          >"):
             for i in range(len(email)):
                 if email[i]=="@":
                     val += 1   
-        #-------------------------------------------------------------------#
-        pos_est=busca_estud_email(email)
-        pos_mod=busca_mod_email(email)
+    
     ve.email=email
     #------------------------Contraseña-------------------------#
     clear()
@@ -621,13 +619,13 @@ def menu_registrarse(text="<          Registro          >"):
     ve.name=name
     clear()
     cartel(text,AZUL)
-    sexo=input.uper("Ingrese su sexo <M> <F>:")
+    sexo=input("Ingrese su sexo <M> <F>:").lower()
     while sexo!="m" and sexo!="f":
         clear()
         cartel(text,AZUL)
         print("Sexo invalido.\nIntente nuevamente.")
-        sexo=input.uper("Ingrese su sexo <M> <F>:")
-    ve.sexo=sex
+        sexo=input("Ingrese su sexo <M> <F>:").lower()
+    ve.sexo=sexo
     #-------------------Fecha nacimiento----------------------------#
     clear()
     cartel(text,AZUL)
@@ -636,12 +634,12 @@ def menu_registrarse(text="<          Registro          >"):
     #------------------Demas datos--------------------------------# 
     clear()
     cartel("¿Desea terminar de completar sus datos personales ahora?(<Si> <No>)",AZUL)
-    seguir=input.lower(">>>")
+    seguir=input(">>>").lower()
     while seguir!="si" and seguir!="no":
         clear()
         cartel("¿Desea terminar de completar sus datos personales ahora?(<Si> <No>)",AZUL)
         print("Opcion invalida.\nIntente nuevamente.")
-        seguir=input.lower(">>>")
+        seguir=input(">>>").lower()
     if seguir=="si":
         clear()
         cartel(text,AZUL)

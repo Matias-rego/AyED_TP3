@@ -50,7 +50,7 @@ def validar_fecha():
             if datetime.strptime(fecha_nacimiento, "%Y/%m/%d") < datetime.now():
                 clear()
                 print("Fecha válida")
-                ok = False
+                valida = False
             else:
                 clear() 
                 print("Fecha inválida") 
