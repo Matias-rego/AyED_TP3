@@ -52,26 +52,23 @@ def track_2(estudiantes):
     getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
-def bonus(estudiantes):
-    # (estudiantes: M_8x8_str)
+def bonus():
     # var: 
     # String: opc
     opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
     
     while opc!="0":
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m        \033[1;37mBonus Tracks                \033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        print("\033[1;37m1\033[0;m. Bonus Track 1")
-        print("\033[1;37m2\033[0;m. Bonus Track 2")
-        print("\033[1;37m0\033[0;m. Volver.")
-        
-        opc = input("\n\033[1;34m>>> \033[0;m")
-
         clear()  
+        opc = menu("Bonus track","",[
+            "1. Bonus track 1.",
+            "2. Bonus track 2.",
+            "0. Salir.",
+            "","","","","","",""],
+        AZUL)
+         
         match opc:
             case "1": track_1()            
-            case "2": track_2(estudiantes)            
+            case "2": track_2()            
             case "0": clear()
             case  _ : invalido()
 

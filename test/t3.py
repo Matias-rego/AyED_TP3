@@ -1,5 +1,6 @@
 from random import randint
 import time
+from turtle import delay
 import keyboard
 
 #     # Datos de usuarios pre-cargados
@@ -50,7 +51,9 @@ while True:
                 even = keyboard.read_event()
                 if even.event_type == keyboard.KEY_UP:
 
-                    if even.name == "bloq despl":
+                    # if even.name == "bloq despl":
+                    if even.name == "f5" or even.name == "bloq despl" :
+                        time.sleep(3)
                         keyboard.write("1\n")
                         r= randint(1,3)
                         keyboard.write(esudiantes[r][0],tim2)
@@ -61,59 +64,59 @@ while True:
                         keyboard.write("2\n")
                         keyboard.write("1\n")
                         
-                    if even.name == "4":
-                        keyboard.press_and_release("backspace")
-                        print('Eestudiantes todos')
-                        for i in range(0,4):
-                            for j in range(0,7):
-                                keyboard.write(esudiantes[i][j],tim2)
-                                time.sleep(tim)
-                                keyboard.write("\n")
+                    # if even.name == "4":
+                    #     keyboard.press_and_release("backspace")
+                    #     print('Eestudiantes todos')
+                    #     for i in range(0,4):
+                    #         for j in range(0,7):
+                    #             keyboard.write(esudiantes[i][j],tim2)
+                    #             time.sleep(tim)
+                    #             keyboard.write("\n")
                         
-                        for i in range(0,3):
-                            keyboard.write(moderadores[i][0]+"\n",tim2)
-                            time.sleep(tim)
-                            keyboard.write(moderadores[i][1]+"\n",tim2)
-                            time.sleep(tim)
-                            keyboard.write("si\n")
-                        keyboard.write(moderadores[3][0]+"\n"+moderadores[3][1]+"\n",tim2)  
+                    #     for i in range(0,3):
+                    #         keyboard.write(moderadores[i][0]+"\n",tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write(moderadores[i][1]+"\n",tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("si\n")
+                    #     keyboard.write(moderadores[3][0]+"\n"+moderadores[3][1]+"\n",tim2)  
                         
-                        time.sleep(0)
-                        tim = 0
+                    #     time.sleep(0)
+                    #     tim = 0
                         
-                        for i in range(4,8):
-                            keyboard.write("2\n")
-                            keyboard.write(esudiantes[i][0], tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #     for i in range(4,8):
+                    #         keyboard.write("2\n")
+                    #         keyboard.write(esudiantes[i][0], tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][1],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][1],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][1],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][1],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][2],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][2],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][3],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][3],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][4],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][4],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][5],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][5],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                             
-                            keyboard.write(esudiantes[i][6],tim2)
-                            time.sleep(tim)
-                            keyboard.write("\n")
+                    #         keyboard.write(esudiantes[i][6],tim2)
+                    #         time.sleep(tim)
+                    #         keyboard.write("\n")
                 
                     
                     if even.name == "5":

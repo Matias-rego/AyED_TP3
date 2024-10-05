@@ -96,7 +96,7 @@ def pre_usuario():
         usuariogenerico.sexo = "m" if random.randint(0,1) else "s"
         usuariogenerico.estado = True
         usuariogenerico.materia_fav = "Algoritmos y Estructuras de Datos"
-        usuariogenerico.bio = ""
+        usuariogenerico.bio = "0123456789"*2
         usuariogenerico.pais = "Argentina"
         usuariogenerico.ciudad = "Rosario"
         usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
@@ -111,7 +111,6 @@ def calcular_edad(fecha_nacimiento):
     # Var:
     # Datatime: fecha_actual ; fecha_actual.year ; fecha_nacimiento.year ;fecha_actual.month ; fecha_nacimiento.month ; fecha_actual.day ; fecha_nacimiento.day
     # Entero: edad
-
     
     fecha_nacimiento = datetime.strptime(fecha_nacimiento, "%Y/%m/%d")
     fecha_actual = datetime.now()
@@ -168,21 +167,9 @@ def pre_random_likes():
                     vl.destinatario=vr2.id #se asigna el destinatario del like
                     l_likes.seek(0,2)#posicionamiento del puntero
                     #desde aca es el guardado del like en cuestion
-                    Format_likes(vl)
+                    format_likes(vl)
                     pickle.dump(vl,l_likes)
                     l_likes.flush()    
-
-def cambio_dato_estudiante(dato:str,x:int,estudiante:Estudiantes,opcion:str):
-    aux=input(f"Ingrese su nuevo/a {opcion}:")
-    estudiante.__dict__[dato]=aux
-    pos=busca_estud_id(estudiante.id)
-    l_estudiantes.seek(0,0)
-    vr=pickle.load(l_estudiantes)
-    cant=l_estudiantes.tell()
-    l_estudiantes.seek(cant*pos,0)
-    Format_Estudiante(estudiante)
-    pickle.dump(estudiante,l_estudiantes)
-    l_estudiantes.flush()
 
 def menu_ver_candidatos(estudiante:Estudiantes):
     # var:
@@ -212,115 +199,228 @@ def menu_ver_candidatos(estudiante:Estudiantes):
         Re=pickle.load(l_estudiantes)
         
     pos = min
+
+    # areglo donde guardo las opsiones predeterminadas
+    # opca = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "] 
+    # areglo donde guardo las opsiones que se van a mostrar 
+    opca = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "]
+    # areglo donde guardo las opsiones validas que tiene el usuario
+    # opcv = [ b'\r', b'a', b's', b'q', b'l', b'r'] 
+    opcv = [ b'\r', b'q', b's', b'q', b'l', b'r'] 
+
+    ch = ""
+    prech = ""
+
+    estado = [0,1,1,1,1]
     
-    opc = ""
+    # 0 no se muestra
+    # 1 se muestra normal
+    # 2 se muestra verde
     
-    while opc != "r":
-        clear()
-        l_estudiantes.seek(pos)
-        estud = pickle.load(l_estudiantes)
-        # id         - 4
-        # email      - 32
-        # name       - 32
-        # materia_fav  13
-        # bio        - 255
-        # pais       - 32
-        # ciudad     - 32
-        # fecha      - 10
-        """
-        ╔════════════════════════════════════╦════════════════════════════╦═══════╗
-        ║   Nombre  :                        ║         Biografia:         ║ID:    ║
-        ║   Email   :                        ║                                    ║
-        ║   Pais    :                        ║                                    ║
-        ║   Ciudad  :                        ║                                    ║
-        ║   Sexo    :                        ║                                    ║
-        ║   Edad    :                        ║                                    ║
-        ║ Nacimiento:                        ║                                    ║
-        ║ MateriaFav:                        ║                                    ║
-        ╠═════════╦═════════════╦════════════╩════════════╦═════════════╦═════════╣
-        ║ << A << ║  Q. salir   ║     L. Quitar Like      ║ R. reportar ║ >> S >> ║
-        ╚═════════╩═════════════╩═════════════════════════╩═════════════╩═════════╝
+    l_estudiantes.seek(pos)
+    estud = pickle.load(l_estudiantes)
+
+
+    while prech != b'q' or (ch !=  b'\r' and ch != b'q'):
+        
+        # defino las opsiones que tiene el usuario 
         
         
-        """
+        estado[2] = 1
+        opcv[4] = b'l'
         
-        opc = ""
-        print(AZUL+"╔"+"═"*73+"╗")
-        print("\033[1;34m|\033[0;mid                 : ",estud.id)
-        print("\033[1;34m|\033[0;mEmail              : ",estud.email)
-        print("\033[1;34m|\033[0;mNombre             : ",estud.name)
-        print("\033[1;34m|\033[0;mFecha de nacimiento: ",estud.fecha)
-        print("\033[1;34m|\033[0;mEdad               : ",calcular_edad(estud.fecha))
-        print("\033[1;34m|\033[0;mBiografia          : ",estud.bio)
-        print("\033[1;34m|\033[0;mPais               : ",estud.pais)
-        print("\033[1;34m|\033[0;mSexo               : ",estud.sexo)
-        print("\033[1;34m--------------------------------------\033[0;m")
-        
-        opcs = ["r"]*3
-        
-        if estud.id == estudiante.id:
-            print("Estos son tus datos actuales")
+        # atuo dependiendo de lo que el usuari ingreso      
+        if ch ==  b'\r':
+            match prech:
+                case b'a':
+                    pos -= t1
+                    opcv[2] = b's'
+                    estado[4] = 1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                    estado[0] = 1
+                    
+                case b's':
+                    pos += t1
+                    opcv[1] = b'a'
+                    estado[0] = 1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                    prech = b''
+                    estado[4] = 1
+
+            prech = b''
+        elif ch ==  b'a':
+            estado[0] = 2
+            if prech == ch:
+                pos -= t1
+                opcv[2] = b's'
+                estado[4] = 1
+                l_estudiantes.seek(pos)
+                estud = pickle.load(l_estudiantes)
+                prech = b''
+                estado[0] = 1
+            else:
+                prech = b'a'
             
-    #     me_gusta = ""    
-    #     for i in range(0,j+1):
-    #         if likes[id][poss[i]] == 1:
-    #             if me_gusta != "":
-    #                 me_gusta = me_gusta + ", " 
-    #             me_gusta = me_gusta + str(estudiantes[poss[i]][3])
-                
-    #     if me_gusta != "":
-    #         print("Le diste like a: ", me_gusta)        
-    #     else:
-    #         print("Aun no le diste like a nadie ")
-    
-    
-        print("r. Para regresar al menu principal")
-        if min < pos:
-            print("a. Pagina anterior         ",end="")
-            opcs[0] = "a"
+
+        elif ch ==  b's':
+            estado[4] = 2
+            if prech == ch:
+                pos += t1
+                opcv[1] = b'a'
+                estado[0] = 1
+                l_estudiantes.seek(pos)
+                estud = pickle.load(l_estudiantes)
+                prech = b''
+                estado[4] = 1
+            else:
+                prech = b's'
+            
+
+
+        elif ch ==  b'q':
+            estado[1] = 2
+            if prech == ch:
+                ch == b''
+            else:
+                prech = b'q'
+
+
+        elif ch ==  b'l':
+            estado[2] = 2
+            if prech == ch:
+                prech = b''
+                estado[2] = 1
+                pp = is_like(estudiante,estud)
+                if pp>0:
+                    quitar_Like(pp)
+                else:
+                    dar_Like(estudiante,estud)
+            else:
+                prech = b'l'
+
+
+        elif ch ==  b'r':
+            estado[3] = 2
+            prech = b'r'
+            
+        if min >= pos:
+            opcv[1] = b'q'
+            estado[0] = 0
+        
+        if pos >= max-t1:
+            opcv[2] = b'q'
+            estado[4] = 0
+            
+        if is_like(estudiante,estud)>0:
+            opca[2] = "     L. Quitar Like      "
         else:
-            print("                           ",end="")
+            opca[2] = "       L. Dar Like       "
+    
+            
         
-        # if estud.id != estudiante.id:
-        #     if likes[id][pos] == 0:
-        #         print("m. Dar Like         ",end="")
-        #     else:
-        #         print("m. Quitar Like      ",end="")
-        #     opcs[1] = "m"
-            
-    #     else:
-    #         print("                    ",end="")
-            
-        if pos < max-t1:
-            print("s. Pagina siguiente")
-            opcs[2] = "s"
-        else:
-            print("                   ")
-            
-        opc = input(AZUL+">>> \033"+VACIO)
+        
+
         clear()
-        if opc == "r": clear()
-        elif opc == opcs[0] : pos -= t1
-        # elif opc == opcs[1] : 
-        #     if likes[id][poss[pos]] == 0:
-        #         likes[id][poss[pos]] = 1
-        #     else:
-        #         likes[id][poss[pos]] = 0
-        elif opc == opcs[2] : pos += t1
-        else: invalido()
+        # preparo lo que voy a mostrar y lo dibujo enpantalla 
+        print(f"""{AZUL}╔════════════════════════════════════╦═════════════════╦══════════╦═══════╗
+║{VACIO}""",end="")
+        if estud.id != estudiante.id:
+            print("   Nombre  ",end="")
+        else:
+            print(" Tu nombre ",end="")
+            estado[2] = 0
+            opcv[4] = b'q'
+        print(f""": {estud.name[:22].ljust(22," ")} {AZUL}║{VACIO} Biografia:      \033[4;34m║likes:{str(cant_likes(estud.id)).center(4)}║ID:{estud.id}║
+║{VACIO}   Email   : {estud.email[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[0:34]} {AZUL}║
+║{VACIO}   Pais    : {estud.pais[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[34:68]} {AZUL}║
+║{VACIO}   Ciudad  : {estud.ciudad[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[68:102]} {AZUL}║
+║{VACIO}   Sexo    : """,end="")
+        if estud.sexo == "m":
+            print("Masculino             ",end="")
+        else:
+            print("Femenino              ",end="")
+        
+        print(f""" {AZUL}║{VACIO} {estud.bio[102:136]} {AZUL}║
+║{VACIO}   Edad    : {str(calcular_edad(estud.fecha))[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[136:170]} {AZUL}║
+║{VACIO} Nacimiento: {estud.fecha[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[170:204]} {AZUL}║
+║{VACIO} MateriaFav: {estud.materia_fav[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[204:238]} {AZUL}║
+╠═════════╦═════════════╦════════════╩════════════╦═════════════╦═════════╣\n║""",end="")
+        
+        for i in range(5):
+            match estado[i]:
+                case 0:
+                    print(len(opca[i])*" ",end="")
+                case 1:
+                    print(VACIO+opca[i],end="")
+                case 2:
+                    print(VERDE+opca[i],end="")
+                    estado[i] = 1
+            print(AZUL+"║",end="")
+                    
+        print("\n╚═════════╩═════════════╩═════════════════════════╩═════════════╩═════════╝")
+        
+        # leo y verifico lo que ingresa el usuario
+        ch = "" 
+        while ch !=  opcv[0] and ch !=  opcv[1] and ch !=  opcv[2] and ch !=  opcv[3] and ch !=  opcv[4] and ch !=  opcv[5] :
+            ch = getch().lower()
+        
+        
+ 
+    
+    
+    
+    # opcs = ["r"]*5
+#     print("r. Para regresar al menu principal")
+#     if min < pos:
+#         print("a. Pagina anterior         ",end="")
+#         opcs[0] = "a"
+#     else:
+#         print("                           ",end="")
+    
+#     # if estud.id != estudiante.id:
+#     #     if likes[id][pos] == 0:
+#     #         print("m. Dar Like         ",end="")
+#     #     else:
+#     #         print("m. Quitar Like      ",end="")
+#     #     opcs[1] = "m"
+        
+# #     else:
+# #         print("                    ",end="")
+        
+#     if pos < max:
+#         print("s. Pagina siguiente")
+#         opcs[2] = "s"
+#     else:
+#         print("                   ")
+        
+    
+#     clear()
+#     if opc == "r": clear()
+#     elif opc == opcs[0] : pos -= t1
+#     # elif opc == opcs[1] : 
+#     #     if likes[id][poss[pos]] == 0:
+#     #         likes[id][poss[pos]] = 1
+#     #     else:
+#     #         likes[id][poss[pos]] = 0
+#     elif opc == opcs[2] : pos += t1
+#     else: invalido()
 
 #----------------------------------------------------------------------------------------------------------------------------# 
 #BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      
 def busca_estud_id(id):
-    
+    global estudiante
     t=os.path.getsize(r_estudiantes)
     l_estudiantes.seek(0,0)
+    
+    id = str(id).ljust(4," ")
     pp=0
-    vr=pickle.load(l_estudiantes)
-    while l_estudiantes.tell()<t and id!=vr.id:
+    estudiante=pickle.load(l_estudiantes)
+    while l_estudiantes.tell()<t and id!=estudiante.id:
         pp=l_estudiantes.tell()
-        vr=pickle.load(l_estudiantes)
-    if id==vr.id:
+        estudiante=pickle.load(l_estudiantes)
+    if id==estudiante.id:
         pos=pp
     else:
         pos=-1
@@ -346,25 +446,101 @@ def busca_estud_email(email):
     return pos
 
 def busca_mod_email(email):
-    global l_moderadores, r_moderadores, moderador
+    global moderador
     t=os.path.getsize(r_moderadores)
     email = email.ljust(32," ")
     
     l_moderadores.seek(0,0)
     pp=0
     moderador=pickle.load(l_moderadores)
-    while l_moderadores.tell()<t and id!=moderador.email:
+    while l_moderadores.tell()<t and email!=moderador.email:
         pp=l_moderadores.tell()
         moderador=pickle.load(l_moderadores)
-    if id==moderador.email:
+    if email==moderador.email:
         pos=pp
     else:
         pos=-1
 
     return pos
+
+def busca_admin(email):
+    global administrador
+    t=os.path.getsize(r_administradores)
+    email = email.ljust(32," ")
+
+    l_administradores.seek(0)
+    pp=0
+    administrador=pickle.load(l_administradores)
+    while l_administradores.tell()<t and email!=administrador.email:
+        pp=l_administradores.tell()
+        administrador=pickle.load(l_administradores)
+    if email==administrador.email:
+        pos=pp
+    else:
+        pos=-1
+
+    return pos
+
+def cant_likes(id: int) -> int:
+    t=os.path.getsize(r_likes)
+    l_likes.seek(0,0)
+    pickle.load(l_likes)
+    t1=l_likes.tell()
+    cant=t//t1
+    
+    n_likes = 0
+    for i in range(0,cant):
+        l_likes.seek(i * t1,0)
+        like=pickle.load(l_likes)
+        if like.destinatario == id:
+            n_likes += 1
+    
+    return n_likes  
+
+def is_like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> int:
+    t=os.path.getsize(r_likes)
+
+    l_likes.seek(0,0)
+    pp=0
+    like=pickle.load(l_likes)
+    while l_likes.tell()<t and (estudiante1.id != like.remitente or estudiante2.id != like.destinatario):
+        pp=l_likes.tell()
+        like=pickle.load(l_likes)
+    if (estudiante1.id == like.remitente and estudiante2.id == like.destinatario):
+        pos=pp
+    else:
+        pos=-1
+
+    return pos
+
+def quitar_Like(pos) -> None:
+    t=os.path.getsize(r_likes)
+    l_likes.seek(0,0)
+    pickle.load(l_likes)
+    t1=l_likes.tell()
+    
+    l_likes.seek(t-t1,0)
+    like_u=pickle.load(l_likes)
+    
+    l_likes.seek(pos,0)
+    pickle.dump(like_u,l_likes)
+    
+    l_likes.truncate(t-t1)
+    l_likes.flush()
+
+    
+def dar_Like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> None:
+    like = Likes()
+    like.remitente = estudiante1.id 
+    like.destinatario = estudiante2.id
+    
+    format_likes(like)
+    l_likes.seek(0,2)
+    pickle.dump(like,l_likes)
+    l_likes.flush()
+    
 #-------------------------------------------------------------------------------------------------------------------------------------------------#
 #FUNCIONES COMO LOGUEO, BUSQUEDA DE ID Y BAJA LOGICA
-
 def menu_logueo():
     # (estudiantes: M_8x8_str, moderadores: M_2x4_str,)
     # Var
@@ -497,7 +673,6 @@ def cerrar_programa():
 ########     ########     ########
 #######       ########       #######
 #######       ########       #######""")
-
  
 def menu_estudiante(estudiante:Estudiantes):
     # Var
@@ -559,12 +734,14 @@ def menu_administradore(administradore:Administradores):
             case "2": menu_gest_reportes()
             case "3": menu_reportes_estadisticos()
 
+
 def menu_registrarse(text="<          Registro          >"):
     clear()
     cartel(text,AZUL)
     ve=Estudiantes()
     #----------------Validacion de <@> del email------------------#
-    email=input("Ingrese su email:")
+    print("Ingrese su email:")
+    email=input(AZUL+"\n>>> \033[0;m")
     val=0
     for i in range(len(email)):
         if email[i]=="@":
@@ -576,7 +753,8 @@ def menu_registrarse(text="<          Registro          >"):
             print("No existen emails con mas de un <@>.\nIntente nuevamente.")
         else:   
             print("No existen emails sin <@>.\nIntente nuevamente.")
-        email=input("Ingrese su email:")
+        print("Ingrese su email:")
+        email=input(AZUL+"\n>>> \033[0;m")
         val=0
         for i in range(len(email)):
             if email[i]=="@":
@@ -587,7 +765,8 @@ def menu_registrarse(text="<          Registro          >"):
         clear()
         cartel(text,AZUL)
         print("Email ya utlizado.\nIntente con uno nuevo.")
-        email=input("Ingrese su email:")
+        print("Ingrese su email:")
+        email=input(AZUL+"\n>>> \033[0;m")
         #------------Validacion de <@> del email---------------------#
         val=0
         for i in range(len(email)):
@@ -600,7 +779,8 @@ def menu_registrarse(text="<          Registro          >"):
                 print("No existen emails con mas de un <@>.\nIntente nuevamente.")
             else:   
                 print("No existen emails sin <@>.\nIntente nuevamente.")
-            email=input("Ingrese su email:")
+            print("Ingrese su email:")
+            email=input(AZUL+"\n>>> \033[0;m")
             val=0
             for i in range(len(email)):
                 if email[i]=="@":
@@ -610,55 +790,59 @@ def menu_registrarse(text="<          Registro          >"):
     #------------------------Contraseña-------------------------#
     clear()
     cartel(text,AZUL)
-    contra=getpass()
-    ve.contraseña=contra
+    ve.contraseña = getpass()
     #----------------------Nombre y sexo--------------------------#
     clear()
     cartel(text,AZUL)
-    name=input("Ingrese su nombre:")
-    ve.name=name
+    print("Ingrese su nombre:")
+    ve.name = input(AZUL+"\n>>> "+VACIO)
+    
     clear()
     cartel(text,AZUL)
-    sexo=input("Ingrese su sexo <M> <F>:").lower()
+    print("Ingrese su sexo <M> <F>:")
+    sexo=input(AZUL+"\n>>> "+VACIO).lower()
     while sexo!="m" and sexo!="f":
         clear()
         cartel(text,AZUL)
         print("Sexo invalido.\nIntente nuevamente.")
-        sexo=input("Ingrese su sexo <M> <F>:").lower()
+        print("Ingrese su sexo <M> <F>:")
+        sexo=input(AZUL+"\n>>> "+VACIO).lower()
     ve.sexo=sexo
     #-------------------Fecha nacimiento----------------------------#
     clear()
     cartel(text,AZUL)
-    fecha=validar_fecha()
-    ve.fecha=fecha
+    ve.fecha = validar_fecha()
+    
     #------------------Demas datos--------------------------------# 
     clear()
-    cartel("¿Desea terminar de completar sus datos personales ahora?(<Si> <No>)",AZUL)
-    seguir=input(">>>").lower()
+    cartel("¿Desea terminar de completar tus datos personales ahora?(<Si> <No>)",AZUL)
+    seguir=input(AZUL+"\n>>> "+VACIO).lower()
     while seguir!="si" and seguir!="no":
         clear()
         cartel("¿Desea terminar de completar sus datos personales ahora?(<Si> <No>)",AZUL)
         print("Opcion invalida.\nIntente nuevamente.")
-        seguir=input(">>>").lower()
+        seguir=input(AZUL+"\n>>> "+VACIO).lower()
     if seguir=="si":
         clear()
         cartel(text,AZUL)
-        mat_fav=input("Ingrese su materia favorita:")
-        ve.materia_fav=mat_fav
+        print("Ingrese su materia favorita:")
+        ve.materia_fav = input(AZUL+"\n>>> "+VACIO)
+        
         clear()
         cartel(text,AZUL)
-        pais=input("Ingrese su país:")
-        ve.pais=pais
+        print("Ingrese su país:")
+        ve.pais = input(AZUL+"\n>>> "+VACIO)
+        
         clear()
         cartel(text,AZUL)
-        city=input("Ingrese su ciudad:")
-        ve.ciudad=city
+        print("Ingrese su ciudad:")
+        ve.ciudad = input(AZUL+"\n>>> "+VACIO)
         clear()
+        
         cartel(text,AZUL)
-        bio=input("Ingrese su biografia:")
-        ve.bio=bio
-    else:
-        pass
+        print("Ingrese su biografia:")
+        ve.bio=input(AZUL+"\n>>> "+VACIO)
+        
     #---------------Elementos de asignacion automatica------------------#    
     ve.estado=True
     t=os.path.getsize(r_estudiantes)
@@ -666,9 +850,9 @@ def menu_registrarse(text="<          Registro          >"):
     aux=pickle.load(l_estudiantes)
     x=l_estudiantes.tell()
     cant=t//x
-    l_estudiantes.seek(cant*x,0)
+    l_estudiantes.seek((cant-1)*x,0)
     vr=pickle.load(l_estudiantes)
-    id_siguiente=(vr.id)+1
+    id_siguiente=int(vr.id)+1
     ve.id=id_siguiente
     #------------Archivar el estudiante cargado-----------------------#
     Format_Estudiante(ve)
@@ -727,7 +911,19 @@ def menu_editar_datos(estudiante:Estudiantes):
             case "6": cambio_dato_estudiante("pais",32,estudiante,"País")
             case "7": cambio_dato_estudiante("ciudad",32,estudiante,"Ciudad")
 
-   
+def cambio_dato_estudiante(dato:str,x:int,estudiante:Estudiantes,opcion:str):
+    aux=input(f"Ingrese su nuevo/a {opcion}:")
+    estudiante.__dict__[dato]=aux
+    pos=busca_estud_id(estudiante.id)
+    l_estudiantes.seek(0,0)
+    vr=pickle.load(l_estudiantes)
+    cant=l_estudiantes.tell()
+    l_estudiantes.seek(cant*pos,0)
+    Format_Estudiante(estudiante)
+    pickle.dump(estudiante,l_estudiantes)
+    l_estudiantes.flush()
+
+
 # menu Gestionar candidatos de nivel 2 dentro de menu estudiantes 
 def menu_candidatos(estudiante:Estudiantes):
     # var:
@@ -763,7 +959,7 @@ def menu_reportar(estudiantes, id_1, reportes_s, reportes_m):
         if id_2 == id_1:
             print("no te puedes reportar a ti mismo")
 
-        email = input("\n\033[1;34m>>> \033[0;m")
+        email = input(AZUL+"\n>>> "+VACIO)
         
         
         clear()

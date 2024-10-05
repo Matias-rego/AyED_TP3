@@ -137,7 +137,7 @@ def pre_random_likes():
                     vl.destinatario=vr2.id #se asigna el destinatario del like
                     l_likes.seek(0,2)#posicionamiento del puntero
                     #desde aca es el guardado del like en cuestion
-                    Format_likes(vl)
+                    format_likes(vl)
                     pickle.dump(vl,l_likes)
                     l_likes.flush()    
 

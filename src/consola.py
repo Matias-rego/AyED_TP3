@@ -23,6 +23,7 @@ else:
         print("error de importacion de la libreria getch")
         os.system("pip install getch")
         from getch import getch
+
 #------------------------------------------------------COLORES----------------------------------------------------------#  
 #COLORES PARA CONSOLA
 VACIO    = "\033[0;m"
@@ -33,7 +34,7 @@ AZUL     = "\033[1;34m" #Estudiante y logueo
 VIOLTEA  = "\033[1;35m" #Administrador
 CIAN     = "\033[1;36m" #Moderador
 BLANCO   = "\033[1;37m"
-DELAY    = 0.025        #DELAY UTILIZADO PARA LAS ANIMACIONES DE PRESENTACION DE MENUS
+DELAY    = 0.02        #DELAY UTILIZADO PARA LAS ANIMACIONES DE PRESENTACION DE MENUS
 #--------------------------------------------FUNCIONES VARIAS--------------------------------------------------#
 #FUNCION PARA VALIDAR LA FECHA DE NACIMIENTO
 def validar_fecha():
@@ -41,16 +42,16 @@ def validar_fecha():
     # String: fecha_nacimiento
     # Bool: ok
     valida = False      
-    cartel("      Introduzca su fecha de nacimiento          En formato YYYY/MM/DD", AZUL)
+    cartel("      Introduzca su fecha de nacimiento          En formato DD/MM/YYYY", AZUL)
     while not valida:
         
         try:
             fecha_nacimiento = input("\n\033[1;34m>>> \033[0;m")
             
-            if datetime.strptime(fecha_nacimiento, "%Y/%m/%d") < datetime.now():
+            if datetime.strptime(fecha_nacimiento, "%d/%m/%Y") < datetime.now():
                 clear()
                 print("Fecha válida")
-                valida = False
+                valida = True
             else:
                 clear() 
                 print("Fecha inválida") 
@@ -60,6 +61,16 @@ def validar_fecha():
     return fecha_nacimiento
 #FUNCION QUE AUTOGENERA MENUS, PASANDOLE EL TEXTO REQUERIDO
 def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO):
+    
+    # clear()
+    # opc = menu("Menu","",[
+    # "1. opc1.",
+    # "2. opc2.",
+    # "3. opc3.",
+    # "4. opc4.",
+    # "0. Salir.",
+    # "","","","",""],
+    # AZUL)
     
     copc = 0
     cartel(text,color)
@@ -118,6 +129,7 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
     print(VACIO)
     clear()
     return preopc
+
 #FUNCION PARA VALIDAR CONTRASEÑA, SEGUN LOS PARAMETROS DADOS
 def getpass(ver = False, cartel =True):
     if cartel: 
