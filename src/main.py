@@ -9,9 +9,7 @@
     comisión: ISI 101
 """
 
-
 # importamos los modulos que usamos
-
 import pickle
 from consola import * 
 from bonus import bonus
@@ -70,25 +68,8 @@ def abrir_archivos():
 #----------------------------------------------------------------------------------------------------------------------------#  
 # USUARIOS PRECARGADOS 
 def pre_usuario():
-    # usuariogenerico = Estudiantes() # type: ignore
-    # for i in range(1):
-    #     usuariogenerico.id = i
-    #     usuariogenerico.email = f"estudiante{i+1}@ayed.com"
-    #     usuariogenerico.contraseña = str(i)*3+str(i+1)*3
-    #     usuariogenerico.name = f"estudiante{i+1}"
-    #     usuariogenerico.sexo = "m" if random.randint(0,1) else "s"
-    #     usuariogenerico.estado = False
-    #     usuariogenerico.materia_fav = "Algoritmos y Estructuras de Datos"
-    #     usuariogenerico.bio = ""
-    #     usuariogenerico.pais = "Argentina"
-    #     usuariogenerico.ciudad = "Rosario"
-    #     usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
-    #     Format_Estudiante(usuariogenerico)
-    #     l_estudiantes.seek(0,2)
-    #     pickle.dump(usuariogenerico, l_estudiantes)
-    #     l_estudiantes.flush()
     usuariogenerico = Estudiantes() # type: ignore
-    for i in range(0,8):
+    for i in range(4):
         usuariogenerico.id = i
         usuariogenerico.email = f"estudiante{i+1}@ayed.com"
         usuariogenerico.contraseña = str(i)*3+str(i+1)*3
@@ -96,29 +77,27 @@ def pre_usuario():
         usuariogenerico.sexo = "m" if random.randint(0,1) else "s"
         usuariogenerico.estado = True
         usuariogenerico.materia_fav = "Algoritmos y Estructuras de Datos"
-        usuariogenerico.bio = "0123456789"*2
+        usuariogenerico.bio = ""
         usuariogenerico.pais = "Argentina"
         usuariogenerico.ciudad = "Rosario"
         usuariogenerico.fecha = str(random.randint(1990,2006))+"/"+str(random.randint(1,12)).rjust(2,"0")+"/"+str(random.randint(1,28)).rjust(2,"0")
         Format_Estudiante(usuariogenerico)
         l_estudiantes.seek(0,2)
         pickle.dump(usuariogenerico, l_estudiantes)
-        l_estudiantes.flush()
-    
+        l_estudiantes.flush()    
 
-def calcular_edad(fecha_nacimiento):
-    # (fecha_macimiento: str)
+def calcular_edad(fecha):
+    # (fecha: str)
     # Var:
-    # Datatime: fecha_actual ; fecha_actual.year ; fecha_nacimiento.year ;fecha_actual.month ; fecha_nacimiento.month ; fecha_actual.day ; fecha_nacimiento.day
+    # Datatime: fecha_actual ; fecha_nacimiento
     # Entero: edad
     
-    fecha_nacimiento = datetime.strptime(fecha_nacimiento, "%Y/%m/%d")
+    fecha_nacimiento = datetime.strptime(fecha, "%Y/%m/%d")
     fecha_actual = datetime.now()
     edad = fecha_actual.year - fecha_nacimiento.year
     if fecha_actual.month < fecha_nacimiento.month or (fecha_actual.month == fecha_nacimiento.month and fecha_actual.day < fecha_nacimiento.day):
         edad -= 1
     return edad
-
 
 #MODERADOR PRECARGADO
 def pre_mod():
@@ -162,7 +141,7 @@ def pre_random_likes():
         for j in range(cant):
             l_estudiantes.seek(x*j,0)# posicionamiento del puntero
             vr2=pickle.load(l_estudiantes)# se van recorriendo los estudiantes destinatarios(por eso se usa otra variable:"vr2")
-            if random.randint(0,1): # si el random devuelve 1, se da like, si es que no se trata del mismo estudiante
+            if random.randint(0,3)==1: # si el random devuelve 1, se da like, si es que no se trata del mismo estudiante
                 if vr.id !=vr2.id:
                     vl.destinatario=vr2.id #se asigna el destinatario del like
                     l_likes.seek(0,2)#posicionamiento del puntero
@@ -170,242 +149,6 @@ def pre_random_likes():
                     format_likes(vl)
                     pickle.dump(vl,l_likes)
                     l_likes.flush()    
-
-def menu_ver_candidatos(estudiante:Estudiantes):
-    # var:
-    # String: me_gusta, opc
-    # Entero: j, i, pos
-    # Arreglo:poss, opcs, 
-    
-    t=os.path.getsize(r_estudiantes)
-    l_estudiantes.seek(0,0)
-    pickle.load(l_estudiantes)
-    t1=l_estudiantes.tell()
-    cant=t//t1
-    
-    min = 0
-    l_estudiantes.seek(0,0)
-    Re=pickle.load(l_estudiantes)
-    while Re.estado == False:
-        min=l_estudiantes.tell()
-        Re=pickle.load(l_estudiantes)
-        
-    max = t
-    l_estudiantes.seek(t-t1)
-    Re=pickle.load(l_estudiantes)
-    while Re.estado == False:
-        max=l_estudiantes.tell()-t1
-        l_estudiantes.seek(max-t1)
-        Re=pickle.load(l_estudiantes)
-        
-    pos = min
-
-    # areglo donde guardo las opsiones predeterminadas
-    # opca = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "] 
-    # areglo donde guardo las opsiones que se van a mostrar 
-    opca = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "]
-    # areglo donde guardo las opsiones validas que tiene el usuario
-    # opcv = [ b'\r', b'a', b's', b'q', b'l', b'r'] 
-    opcv = [ b'\r', b'q', b's', b'q', b'l', b'r'] 
-
-    ch = ""
-    prech = ""
-
-    estado = [0,1,1,1,1]
-    
-    # 0 no se muestra
-    # 1 se muestra normal
-    # 2 se muestra verde
-    
-    l_estudiantes.seek(pos)
-    estud = pickle.load(l_estudiantes)
-
-
-    while prech != b'q' or (ch !=  b'\r' and ch != b'q'):
-        
-        # defino las opsiones que tiene el usuario 
-        
-        
-        estado[2] = 1
-        opcv[4] = b'l'
-        
-        # atuo dependiendo de lo que el usuari ingreso      
-        if ch ==  b'\r':
-            match prech:
-                case b'a':
-                    pos -= t1
-                    opcv[2] = b's'
-                    estado[4] = 1
-                    l_estudiantes.seek(pos)
-                    estud = pickle.load(l_estudiantes)
-                    estado[0] = 1
-                    
-                case b's':
-                    pos += t1
-                    opcv[1] = b'a'
-                    estado[0] = 1
-                    l_estudiantes.seek(pos)
-                    estud = pickle.load(l_estudiantes)
-                    prech = b''
-                    estado[4] = 1
-
-            prech = b''
-        elif ch ==  b'a':
-            estado[0] = 2
-            if prech == ch:
-                pos -= t1
-                opcv[2] = b's'
-                estado[4] = 1
-                l_estudiantes.seek(pos)
-                estud = pickle.load(l_estudiantes)
-                prech = b''
-                estado[0] = 1
-            else:
-                prech = b'a'
-            
-
-        elif ch ==  b's':
-            estado[4] = 2
-            if prech == ch:
-                pos += t1
-                opcv[1] = b'a'
-                estado[0] = 1
-                l_estudiantes.seek(pos)
-                estud = pickle.load(l_estudiantes)
-                prech = b''
-                estado[4] = 1
-            else:
-                prech = b's'
-            
-
-
-        elif ch ==  b'q':
-            estado[1] = 2
-            if prech == ch:
-                ch == b''
-            else:
-                prech = b'q'
-
-
-        elif ch ==  b'l':
-            estado[2] = 2
-            if prech == ch:
-                prech = b''
-                estado[2] = 1
-                pp = is_like(estudiante,estud)
-                if pp>0:
-                    quitar_Like(pp)
-                else:
-                    dar_Like(estudiante,estud)
-            else:
-                prech = b'l'
-
-
-        elif ch ==  b'r':
-            estado[3] = 2
-            prech = b'r'
-            
-        if min >= pos:
-            opcv[1] = b'q'
-            estado[0] = 0
-        
-        if pos >= max-t1:
-            opcv[2] = b'q'
-            estado[4] = 0
-            
-        if is_like(estudiante,estud)>0:
-            opca[2] = "     L. Quitar Like      "
-        else:
-            opca[2] = "       L. Dar Like       "
-    
-            
-        
-        
-
-        clear()
-        # preparo lo que voy a mostrar y lo dibujo enpantalla 
-        print(f"""{AZUL}╔════════════════════════════════════╦═════════════════╦══════════╦═══════╗
-║{VACIO}""",end="")
-        if estud.id != estudiante.id:
-            print("   Nombre  ",end="")
-        else:
-            print(" Tu nombre ",end="")
-            estado[2] = 0
-            opcv[4] = b'q'
-        print(f""": {estud.name[:22].ljust(22," ")} {AZUL}║{VACIO} Biografia:      \033[4;34m║likes:{str(cant_likes(estud.id)).center(4)}║ID:{estud.id}║
-║{VACIO}   Email   : {estud.email[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[0:34]} {AZUL}║
-║{VACIO}   Pais    : {estud.pais[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[34:68]} {AZUL}║
-║{VACIO}   Ciudad  : {estud.ciudad[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[68:102]} {AZUL}║
-║{VACIO}   Sexo    : """,end="")
-        if estud.sexo == "m":
-            print("Masculino             ",end="")
-        else:
-            print("Femenino              ",end="")
-        
-        print(f""" {AZUL}║{VACIO} {estud.bio[102:136]} {AZUL}║
-║{VACIO}   Edad    : {str(calcular_edad(estud.fecha))[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[136:170]} {AZUL}║
-║{VACIO} Nacimiento: {estud.fecha[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[170:204]} {AZUL}║
-║{VACIO} MateriaFav: {estud.materia_fav[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[204:238]} {AZUL}║
-╠═════════╦═════════════╦════════════╩════════════╦═════════════╦═════════╣\n║""",end="")
-        
-        for i in range(5):
-            match estado[i]:
-                case 0:
-                    print(len(opca[i])*" ",end="")
-                case 1:
-                    print(VACIO+opca[i],end="")
-                case 2:
-                    print(VERDE+opca[i],end="")
-                    estado[i] = 1
-            print(AZUL+"║",end="")
-                    
-        print("\n╚═════════╩═════════════╩═════════════════════════╩═════════════╩═════════╝")
-        
-        # leo y verifico lo que ingresa el usuario
-        ch = "" 
-        while ch !=  opcv[0] and ch !=  opcv[1] and ch !=  opcv[2] and ch !=  opcv[3] and ch !=  opcv[4] and ch !=  opcv[5] :
-            ch = getch().lower()
-        
-        
- 
-    
-    
-    
-    # opcs = ["r"]*5
-#     print("r. Para regresar al menu principal")
-#     if min < pos:
-#         print("a. Pagina anterior         ",end="")
-#         opcs[0] = "a"
-#     else:
-#         print("                           ",end="")
-    
-#     # if estud.id != estudiante.id:
-#     #     if likes[id][pos] == 0:
-#     #         print("m. Dar Like         ",end="")
-#     #     else:
-#     #         print("m. Quitar Like      ",end="")
-#     #     opcs[1] = "m"
-        
-# #     else:
-# #         print("                    ",end="")
-        
-#     if pos < max:
-#         print("s. Pagina siguiente")
-#         opcs[2] = "s"
-#     else:
-#         print("                   ")
-        
-    
-#     clear()
-#     if opc == "r": clear()
-#     elif opc == opcs[0] : pos -= t1
-#     # elif opc == opcs[1] : 
-#     #     if likes[id][poss[pos]] == 0:
-#     #         likes[id][poss[pos]] = 1
-#     #     else:
-#     #         likes[id][poss[pos]] = 0
-#     elif opc == opcs[2] : pos += t1
-#     else: invalido()
 
 #----------------------------------------------------------------------------------------------------------------------------# 
 #BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      
@@ -527,7 +270,6 @@ def quitar_Like(pos) -> None:
     
     l_likes.truncate(t-t1)
     l_likes.flush()
-
     
 def dar_Like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> None:
     like = Likes()
@@ -578,71 +320,56 @@ def menu_logueo():
     clear()
     return intentos
 
-def is_login(email,password):
-    # (email:str, password:str)
+def is_login(email:str, password:str)-> str:
     # Var
     # Entero:i
-    #Hacer busqueda en archivos.
     global estudiante, moderador, administrador
-    
     email = email.ljust(32," ")
 
     pos = busca_estud_email(email)
     if pos != -1:
         l_estudiantes.seek(pos,0)
         estudiante = pickle.load(l_estudiantes)
-        
         if estudiante.email == email and estudiante.contraseña == password and estudiante.estado == True:
             return "estud"
-        else:
-            return "inválido"
-    else:
         
+    else:
         pos = busca_mod_email(email)
         if pos != -1:
             l_moderadores.seek(pos,0)
             moderadore = pickle.load(l_moderadores)
             if moderadore.email == email and moderadore.contraseña == password and moderadore.estado == True:
                 return "mod"
-            else:
-                return "inválido"
+            
         else:
-            t=os.path.getsize(r_administradores)
+            pos = busca_admin(email)
+            if pos != -1:
+                l_administradores.seek(pos,0)
+                administrador = pickle.load(l_administradores)
+                if administrador.email == email and administrador.contraseña == password:
+                    return "admin"
+            
+    return "inválido"
 
-            l_administradores.seek(0)
-            pp=0
-            administrador=pickle.load(l_administradores)
-            while l_administradores.tell()<t and email!=administrador.email:
-                pp=l_administradores.tell()
-                administrador=pickle.load(l_administradores)
-            if administrador.email == email and administrador.contraseña == password:
-                return "admin"
-            else:
-                return "inválido"
-
-def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?(<si> <no>)      "):
-    cartel(text,BLANCO)
-    opc = input(BLANCO)
-    while opc != "si" and opc != "no":
-        invalido()
-        cartel(text,BLANCO)
-        opc = input(BLANCO)
-
-    x=busca_estud_id(id)
-    l_estudiantes.seek(0,0)
-    vr=pickle.load(l_estudiantes)
-    cant=l_estudiantes.tell()
-    l_estudiantes.seek(x*cant,0)
-    if opc == "si" :
-        vr.estado = "INACTIVO"
-        print("Perfil desactivado.")
-        Format_Estudiante(vr)
+def deshabilitar_estud(pos,text= "¿Desea eliminar tu perfil?",color = AZUL)-> bool:
+    
+    opc = menu(text,"",
+       ["s. Si",
+        "n. No.",
+        "","","","","","","",""],color)
+    
+    if opc == "s":
+        l_estudiantes.seek(pos,0)
+        vr=pickle.load(l_estudiantes)
+    
+        vr.estado = False
+        l_estudiantes.seek(pos,0)
         pickle.dump(vr,l_estudiantes)
         l_estudiantes.flush()
-    else :
-        print("Perfil ya desactivado.")
-    getpass("oprima enter para volver al menu anterior\n", '')
-    clear()
+        return True
+    else:
+        return False
+    
 #-----------------------------------------------------------------------------------------------------------------------------------------------------#
 #CIERRE DE PROGRAMA
 def cerrar_programa():
@@ -657,22 +384,23 @@ def cerrar_programa():
     
     print("           \033[1;37mFin del programa           ")
     print("       \033[1;37mGracias por visitarnos.         \n\033[0;m")
-
+    
     print("""########       ########       ########
-#######       ########       #######
-########     ########     ########
-#########   ########   #########         
-    ##########################            Programa hecho por:
-        ##################               
+ #######       ########       #######
+  ########     ########     ########
+   #########   ########   #########         
+      ##########################            Programa hecho por:
+          ##################               
 ######################################        -Nicolás Fossati
-######################################        -Matias Miguel Angel Rego
+######################################        -Matias Miguel Angel Rego.
 ######################################        -Marcos Banducci
-        ####################                 -Tomas Agusti
-    ############################
-#########   ########   #########
-########     ########     ########
-#######       ########       #######
-#######       ########       #######""")
+         ####################                 -Tomas Agusti
+     ############################
+   #########   ########   #########
+  ########     ########     ########
+ #######       ########       #######
+ #######       ########       #######""")
+
  
 def menu_estudiante(estudiante:Estudiantes):
     # Var
@@ -708,7 +436,7 @@ def menu_moderadore(mods:Moderadores):
         "3. Reportes estadísticos.",
         "0. Salir.",
         "","","","","",""],
-        AZUL)
+        CIAN)
 
         match (opc):  
             case "1": menu_gest_usuario()
@@ -863,7 +591,6 @@ def menu_registrarse(text="<          Registro          >"):
 #-----------------------------------------------------------#
 # menu Gestionar mi perfil de nivel 2 dentro de menu estudiantes   
 def menu_perfil(estudiante:Estudiantes):
-    # (estudiantes: M_8X8_str, id: int)
     # Var:
     # String: opc
     opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
@@ -878,7 +605,9 @@ def menu_perfil(estudiante:Estudiantes):
 
         match opc:
             case "1": menu_editar_datos(estudiante)     
-            case "2": menu_desactivar_usuario(estudiante)         
+            case "2":
+                if deshabilitar_estud(busca_estud_id(estudiante.id)):
+                    estudiante.estado = False
 
 def menu_editar_datos(estudiante:Estudiantes):
     # (estudiantes: M_8X8_str, id: int)
@@ -940,7 +669,211 @@ def menu_candidatos(estudiante:Estudiantes):
 
         match opc:
             case "1": menu_ver_candidatos(estudiante)
-            case "2": menu_reportar(estudiante)            
+            case "2": menu_reportar(estudiante)       
+
+def menu_ver_candidatos(estudiante:Estudiantes):
+    # var:
+    # String: me_gusta, opc
+    # Entero: j, i, pos
+    # Arreglo:poss, opcs, 
+    
+    t=os.path.getsize(r_estudiantes)
+    l_estudiantes.seek(0,0)
+    pickle.load(l_estudiantes)
+    t1=l_estudiantes.tell()
+    
+    min = 0
+    l_estudiantes.seek(0,0)
+    Re=pickle.load(l_estudiantes)
+    while Re.estado == False:
+        min=l_estudiantes.tell()
+        Re=pickle.load(l_estudiantes)
+        
+    max = t
+    l_estudiantes.seek(t-t1)
+    Re=pickle.load(l_estudiantes)
+    while Re.estado == False:
+        max=l_estudiantes.tell()-t1
+        l_estudiantes.seek(max-t1)
+        Re=pickle.load(l_estudiantes)
+        
+    # areglo donde guardo las opsiones que se van a mostrar 
+    opcs = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "]
+    # areglo donde guardo las opsiones validas que tiene el usuario
+    opcv = [ b'\r', b'q', b's', b'q', b'l', b'r'] 
+    # areglo del los estado de los botones
+    estado = [0,1,1,1,1]
+    # 0 no se muestra
+    # 1 se muestra normal
+    # 2 se muestra verde
+
+    ch = ""
+    prech = ""
+    pos = min
+
+    l_estudiantes.seek(pos)
+    estud = pickle.load(l_estudiantes)
+
+    while prech != b'q' or (ch !=  b'\r' and ch != b'q'):
+        
+        estado[2] = 1
+        opcv[4] = b'l'
+        
+        # dependiendo de lo que el usuari ingreso realiso la opsion corespondiente      
+        if ch ==  b'\r':
+            match prech:
+                case b'a':
+                    opcv[2] = b's'
+                    estado[4] = 1
+                    estado[0] = 1
+                    
+                    pos -= t1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                    while estud.estado == False:
+                        pos -= t1
+                        l_estudiantes.seek(pos)
+                        estud = pickle.load(l_estudiantes)
+                        
+                case b's':
+                    opcv[1] = b'a'
+                    estado[0] = 1
+                    estado[4] = 1
+                    
+                    pos += t1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                    while estud.estado == False:
+                        pos += t1
+                        l_estudiantes.seek(pos)
+                        estud = pickle.load(l_estudiantes)
+                    
+                case b'l':
+                    estado[2] = 1
+                    pp = is_like(estudiante,estud)
+                    if pp>0:
+                        quitar_Like(pp)
+                    else:
+                        dar_Like(estudiante,estud)
+
+            prech = b''
+        elif ch ==  b'a':
+            estado[0] = 2
+            if prech == ch:
+                opcv[2] = b's'
+                estado[4] = 1
+                
+                pos -= t1
+                l_estudiantes.seek(pos)
+                estud = pickle.load(l_estudiantes)
+                while estud.estado == False:
+                    pos -= t1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                prech = b''
+                estado[0] = 1
+            else:
+                prech = b'a'
+            
+        elif ch ==  b's':
+            estado[4] = 2
+            if prech == ch:
+                opcv[1] = b'a'
+                estado[0] = 1
+                
+                pos += t1
+                l_estudiantes.seek(pos)
+                estud = pickle.load(l_estudiantes)
+                while estud.estado == False:
+                    pos += t1
+                    l_estudiantes.seek(pos)
+                    estud = pickle.load(l_estudiantes)
+                prech = b''
+                estado[4] = 1
+            else:
+                prech = b's'
+            
+        elif ch ==  b'q':
+            estado[1] = 2
+            if prech == ch:
+                ch == b''
+            else:
+                prech = b'q'
+                
+        elif ch ==  b'l':
+            estado[2] = 2
+            if prech == ch:
+                prech = b''
+                estado[2] = 1
+                pp = is_like(estudiante,estud)
+                if pp>0:
+                    quitar_Like(pp)
+                else:
+                    dar_Like(estudiante,estud)
+            else:
+                prech = b'l'
+
+        elif ch ==  b'r':
+            estado[3] = 2
+            prech = b'r'
+            
+        # limito que no se pase de los limiten del archibo
+        if min >= pos:
+            opcv[1] = b'q'
+            estado[0] = 0
+        
+        if pos >= max-t1:
+            opcv[2] = b'q'
+            estado[4] = 0
+            
+        if is_like(estudiante,estud)>0:
+            opcs[2] = "     L. Quitar Like      "
+        else:
+            opcs[2] = "       L. Dar Like       "
+
+        clear()
+        # preparo lo que voy a mostrar y lo dibujo enpantalla 
+        print(f"""{AZUL}╔════════════════════════════════════╦═════════════════╦══════════╦═══════╗
+║{VACIO}""",end="")
+        if estud.id != estudiante.id:
+            print("   Nombre  ",end="")
+        else:
+            print(" Tu nombre ",end="")
+            estado[2] = 0
+            opcv[4] = b'q'
+        print(f""": {estud.name[:22].ljust(22," ")} {AZUL}║{VACIO} Biografia:      {AZUL}║\033[4;34mlikes:{str(cant_likes(estud.id)).center(4)}║ID:{estud.id}{VACIO+AZUL}║
+║{VACIO}   Email   : {estud.email[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[0:34]} {AZUL}║
+║{VACIO}   Pais    : {estud.pais[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[34:68]} {AZUL}║
+║{VACIO}   Ciudad  : {estud.ciudad[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[68:102]} {AZUL}║
+║{VACIO}   Sexo    : """,end="")
+        if estud.sexo == "m":
+            print("Masculino             ",end="")
+        else:
+            print("Femenino              ",end="")
+        
+        print(f""" {AZUL}║{VACIO} {estud.bio[102:136]} {AZUL}║
+║{VACIO}   Edad    : {str(calcular_edad(estud.fecha))[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[136:170]} {AZUL}║
+║{VACIO} Nacimiento: {estud.fecha[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[170:204]} {AZUL}║
+║{VACIO} MateriaFav: {estud.materia_fav[:22].ljust(22," ")} {AZUL}║{VACIO} {estud.bio[204:238]} {AZUL}║
+╠═════════╦═════════════╦════════════╩════════════╦═════════════╦═════════╣\n║""",end="")
+        
+        for i in range(5):
+            match estado[i]:
+                case 0:
+                    print(len(opcs[i])*" ",end="")
+                case 1:
+                    print(VACIO+opcs[i],end="")
+                case 2:
+                    print(VERDE+opcs[i],end="")
+                    estado[i] = 1
+            print(AZUL+"║",end="")
+                    
+        print("\n╚═════════╩═════════════╩═════════════════════════╩═════════════╩═════════╝")
+        
+        # leo y verifico lo que ingresa el usuario
+        ch = "" 
+        while ch !=  opcv[0] and ch !=  opcv[1] and ch !=  opcv[2] and ch !=  opcv[3] and ch !=  opcv[4] and ch !=  opcv[5] :
+            ch = getch().lower()
 
 def menu_reportar(estudiantes, id_1, reportes_s, reportes_m):
     # (estudiantes: M_8X8_str, id_1: int, reportes_s: M_8x8_int, reportes__m: M_8X8_str) 
@@ -1053,101 +986,94 @@ def menu_reportes_estadisticos(estudiantes,id, likes) :
     clear()
 
 # menu Gestionar usuarios de nivel 2 dentro de menu moderadores 
-def menu_gest_usuario(estudiantes):
-    # (estudiantes: M_8x8_str)
+def menu_gest_usuario():
     # Var
     # String: opc
     opc= ""
     
-    while opc!="b":
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m          \033[1;37mGestionar usuarios        \033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        print("\033[1;37ma\033[0;m. Desactivar usuario.")
-        print("\033[1;37mb\033[0;m. Volver.")
-
-        opc = input("\n\033[1;34m>>> \033[0;m")  
-
+    while opc!="0":
         clear()
-        match opc:
-            case "a": menu_desactivar_usuario(estudiantes)
-            case "b": clear()
+        opc = menu("Gestionar usuarios","",[
+        "1. Desactivar usuario.",
+        "0. Volver.",
+        "","","","","","","",""],
+        CIAN)
 
-def menu_desactivar_usuario(estudiantes):
-    # (estudiantes: M_8x8_str)
+        if opc == "1": menu_desactivar_usuario()
+
+def menu_desactivar_usuario() -> None:
     # Var
     # Entero: id
     # String: opc
 
-    opc = ""
-    while opc!="0":
-        clear()
-        opc = menu("Desactivar usuario","Seleccione el metodo que utilizará.",[
-        "1. Desde el id.",
-        "2. Desde el email de usuario.",
-        "0. Volver.",
-        "","","","","","",""],
-        AZUL)
-
-    match opc:
-        case "1":
-            tids = -1
-            while tids == -1:
-                clear()
-                cartel("Desactivar usuario ", AZUL)
-                userid = int(input("Ingrese el id del usuario que desea desactivar: "))
-                tids = busca_estud_id(userid)
-            deshabilitar_estud(userid)
-        case "2":
-            email = -1
-            while email == -1:
-                clear()
-                cartel("Desactivar usuario ", AZUL)
-                useremail = input("Ingrese el email del usuario que desea desactivar: ")
-                email = busca_estud_email(useremail)
-            l_estudiantes.seek(0,0)            
-            vr=pickle.load(l_estudiantes)            
-            tam = l_estudiantes.tell()            
-            l_estudiantes.seek(tam*pos,0)
-            vr=pickle.load(l_estudiantes)
-            deshabilitar_estud(vr.id)
-        case "0":
-            clear()
-
-                    
-    if estudiante.estado:
-        deshabilitar_estud(estudiantes,id,"   ¿Desea desactivar el perfil?     ")
-    else:
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m\033[1;37m El usuario ya ha sido desactivado \033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        getpass("oprima enter para volver al menu anterior\n", '')
-    
     clear()
+    opc = menu("Desactivar usuario","Seleccione el metodo que utilizará.",[
+    "1. Desde el id.",
+    "2. Desde el email de usuario.",
+    "0. Volver.",
+    "","","","","","",""],
+    CIAN)
+
+    if opc != "0":
+        
+        pos = -1
+        clear()
+        while pos < 0:
+            cartel("Desactivar usuario ", CIAN)
+            
+            if opc == "1":
+                print("Ingrese el id del usuario que desea desactivar: ")
+                try:
+                    user = int(input("\n\033[1;34m>>> \033[0;m"))
+                    pos = busca_estud_id(user)
+                    if pos != -1:
+                        l_estudiantes.seek(pos,0)
+                        estudiante = pickle.load(l_estudiantes)
+                        if estudiante.estado == False:
+                            pos = -1 
+                        
+                except:
+                    pos = -1
+                    
+            else:
+                print("Ingrese el email del usuario que desea desactivar: ")
+                user = input("\n\033[1;34m>>> \033[0;m")
+                pos = busca_estud_email(user)
+                if pos != -1:
+                    l_estudiantes.seek(pos,0)
+                    estudiante = pickle.load(l_estudiantes)
+                    if estudiante.estado == False:
+                        pos = -1 
+                
+            invalido()
+        clear()
+
+        if deshabilitar_estud(pos,"¿Desea desactivar este perfil?",CIAN):
+            cartel("El usuario ha sido desactivado",CIAN)
+        else:
+            cartel("El usuario no ha sido desactivado",CIAN)
+        print("oprima cualquier tecla para volver al menu anterior\n")
+        getch()
+    
 
 def menu_gest_usuarios():
     pass
 # menu Gestionar reportes de nivel 2 dentro de menu moderadores 
-def menu_gest_reportes(estudiantes, reportes_s, reportes_m) :
-    # (estudiantes: M_8x8_str, reportes_s: M_8x8_int, reportes_m: M_8x8_int)
+def menu_gest_reportes() :
     # Var
     # String: opc
     opc= ""
-
-    while opc!="b":
-        print("\033[1;34m--------------------------------------")
-        print("|\033[0;m          \033[1;37mGestionar reportes        \033[1;34m|")
-        print("--------------------------------------\033[0;m\n")
-        print("\033[1;37ma\033[0;m. Ver reportes.")
-        print("\033[1;37mb\033[0;m. Volver.")
-
-        opc = input("\n\033[1;34m>>> \033[0;m")
-
+    
+    while opc!="0":
         clear()
-        match opc:
-            case "a": menu_reportes(estudiantes, reportes_s, reportes_m)
-            case "b": clear()
+        opc = menu("Gestionar reportes","",[
+        "1. Ver reportes.",
+        "0. Volver.",
+        "","","","","","","",""],
+        CIAN)
 
+        if opc == "1": menu_reportes()
+  
 def menu_reportes(estudiantes, reportes_s, reportes_m):
     # (moderadores: M_2x4_str, estudiantes: M_8x8_str, repreportes_s: M_8x8_int, reportes_m: M_8x8_str)
     #Var
@@ -1224,10 +1150,9 @@ def menu_reportes(estudiantes, reportes_s, reportes_m):
             getpass("oprima enter para volver al menu anterior\n", '')
     clear()
 
-
 abrir_archivos()
-
 opc = ""
+
 while opc!="0":
     clear()    
     # Mostramos el menu de login
@@ -1240,7 +1165,6 @@ while opc!="0":
         AZUL)
 
     match opc:
-        
         case "1": 
             if menu_logueo()==0: 
                 print(ROJO+"    Demasiados intentos incorrectos.\n Intente mas tarde."+VACIO)
@@ -1248,7 +1172,5 @@ while opc!="0":
                 
         case "2": menu_registrarse()
         case "3": bonus()
-        case "0": clear()
-        case  _ : invalido()
 
 cerrar_programa()
