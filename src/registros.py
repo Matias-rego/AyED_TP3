@@ -36,9 +36,11 @@ class Moderadores:
     def __init__(self) -> None:
         self.id         = 0
         self.email      = ""
-        self.contraseña =""
+        self.contraseña = ""
         self.name       = ""
         self.estado     = False
+        self.reportes_aceptados = 0
+        self.reportes_ignorados = 0
 
 def Format_Mods(x):
     x.id         =str(x.id)
@@ -46,7 +48,11 @@ def Format_Mods(x):
     x.email      = x.email[:32].ljust(32," ")
     x.contraseña =x.contraseña[:16].ljust(16," ")
     x.name       = x.name[:22].ljust(22," ")
-
+    x.reportes_aceptados=str(x.reportes_aceptados)
+    x.reportes_aceptados=x.reportes_aceptados[:4].ljust(4," ")
+    x.reportes_ignorados=str(x.reportes_ignorados)
+    x.reportes_ignorados=x.reportes_ignorados[:4].ljust(4," ")
+    
 #ADMINS        
 class Administradores:
     def __init__(self) -> None:
@@ -72,12 +78,14 @@ def format_likes(x):
 #REPORTES
 class Reportes:
     def __init__(self) -> None:
-        self.id_reportante=0
         self.id_reportado=0
+        self.id_reportante=0
         self.razon=""
-        self.estado=False
+        self.estado = 0
         
 def Format_Reportes(x):
     x.id_reportado  = str(x.id_reportado)[:4].ljust(4," ")
     x.id_reportante = str(x.id_reportante)[:4].ljust(4," ")
-    x.razon         = x.razon[:255].ljust(255," ")
+    x.razon         = x.razon[:100].ljust(100," ")
+    x.estado = str(x.estado)[:1].ljust(1," ")
+    

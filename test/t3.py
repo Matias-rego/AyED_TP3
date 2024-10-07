@@ -10,7 +10,7 @@ esudiantes =[
     ["estudiante2@ayed.com","111222", "estudiante2","soy el estudiante 2","Pintar, viajar" ,"",""],
     ["estudiante3@ayed.com","222333", "estudiante3","soy el estudiante 3","Bailar, cocinar","",""],
     ["estudiante4@ayed.com","333444", "estudiante4","soy el estudiante 4","Jugar Videojuegos y leer","",""],
-    ["estudiante5@ayed.com","444555", "estudiante5","soy el estudiante 5","Estudiar matematicas","",""],
+    ["Adminpre@ayed.com","000000", "estudiante5","soy el estudiante 5","Estudiar matematicas","",""],
     ["estudiante6@ayed.com","666", "estudiante6","soy el estudiante 6","Aprender nuevos idiomas","",""],
     ["estudiante7@ayed.com","777", "estudiante7","soy el estudiante 7","Conocer nuevos lugares","",""],
     ["estudiante8@ayed.com","888", "estudiante8","soy el estudiante 8","Hacer amigos nuevos","",""],
@@ -34,7 +34,7 @@ moderadores = [
 
 
 tim = 0
-tim2 = 0.1
+tim2 = 0
 
 
 while True:
@@ -53,16 +53,16 @@ while True:
 
                     # if even.name == "bloq despl":
                     if even.name == "f5" or even.name == "bloq despl" :
-                        time.sleep(3)
+                        time.sleep(2)
                         keyboard.write("1\n")
-                        r= randint(1,3)
+                        r= randint(4,4)
                         keyboard.write(esudiantes[r][0],tim2)
                         keyboard.write("\n")
                         keyboard.write(esudiantes[r][1],tim2)
                         keyboard.write("\n")
                         time.sleep(2)
                         keyboard.write("2\n")
-                        keyboard.write("1\n")
+                        keyboard.write("2\n")
                         
                     # if even.name == "4":
                     #     keyboard.press_and_release("backspace")

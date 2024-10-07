@@ -142,107 +142,27 @@ def pre_random_likes():
                     l_likes.flush()    
 
 def cambio_dato_estudiante(dato:str,x:int,estudiante:Estudiantes,opcion:str):
-    aux=input(f"Ingrese su nuevo/a {opcion}:")
-    estudiante.__dict__[dato]=aux
-    pos=busca_estud_id(estudiante.id)
-    l_estudiantes.seek(0,0)
-    vr=pickle.load(l_estudiantes)
-    cant=l_estudiantes.tell()
-    l_estudiantes.seek(cant*pos,0)
-    Format_Estudiante(estudiante)
-    pickle.dump(estudiante,l_estudiantes)
-    l_estudiantes.flush()
-
-def menu_ver_candidatos(estudiante:Estudiantes):
-    # var:
-    # String: me_gusta, opc
-    # Entero: j, i, pos
-    # Arreglo:poss, opcs, 
-    
-    t=os.path.getsize(r_estudiantes)
-    l_estudiantes.seek(0,0)
-    estud = pickle.load(l_estudiantes)
-    t1=l_estudiantes.tell()
-    cant=t//t1
-    
-    min = 0
-    l_estudiantes.seek(0,0)
-    Re=pickle.load(l_estudiantes)
-    while Re.estado == False:
-        min=l_estudiantes.tell()
-        Re=pickle.load(l_estudiantes)
-        
-    print(f"{cant=},{min=}")
-    
-    opc = ""
-    pos = 0
-    
-    while opc != "r":
+    print(f"Su {opcion} ya establecida es: ",estudiante.__dict__[dato],"\n ¿Desea cambiarlo?<Si><No>")
+    cambiar=input(">>>").lower()
+    while cambiar!="si" and cambiar!="no":
         clear()
-        
-        opc = ""
-        print("\033[1;34m--------------------------------------\033[0;m")
-        print("\033[1;34m|\033[0;mEmail              : ",estud.email)
-        print("\033[1;34m|\033[0;mNombre             : ",estud.name)
-        print("\033[1;34m|\033[0;mFecha de nacimiento: ",estud.fecha)
-        print("\033[1;34m|\033[0;mEdad               : ",calcular_edad(estud.fecha))
-        print("\033[1;34m|\033[0;mBiografia          : ",estud.bio)
-        print("\033[1;34m|\033[0;mPais               : ",estud.pais)
-        print("\033[1;34m|\033[0;mSexo               : ",estud.sexo)
-        print("\033[1;34m--------------------------------------\033[0;m")
-        
-        opcs = ["r"]*3
-        
-        if estud.id == estudiante.id:
-            print("Estos son tus datos actuales")
-            
-    #     me_gusta = ""    
-    #     for i in range(0,j+1):
-    #         if likes[id][poss[i]] == 1:
-    #             if me_gusta != "":
-    #                 me_gusta = me_gusta + ", " 
-    #             me_gusta = me_gusta + str(estudiantes[poss[i]][3])
-                
-    #     if me_gusta != "":
-    #         print("Le diste like a: ", me_gusta)        
-    #     else:
-    #         print("Aun no le diste like a nadie ")
-    
-    
-        print("r. Para regresar al menu principal")
-    #     if pos <= j and pos >0:
-    #         print("a. Pagina anterior         ",end="")
-    #         opcs[0] = "a"
-    #     else:
-    #         print("                           ",end="")
-        
-        # if estud.id != estudiante.id:
-        #     if likes[id][pos] == 0:
-        #         print("m. Dar Like         ",end="")
-        #     else:
-        #         print("m. Quitar Like      ",end="")
-        #     opcs[1] = "m"
-            
-    #     else:
-    #         print("                    ",end="")
-            
-    #     if pos >= 0 and pos < j:
-    #         print("s. Pagina siguiente")
-    #         opcs[2] = "s"
-    #     else:
-    #         print("                   ")
-            
-    #     opc = input("\033[1;34m>>> \033[0;m")
-    #     clear()
-    #     if opc == "r": clear()
-    #     elif opc == opcs[0] : pos -= 1
-    #     elif opc == opcs[1] : 
-    #         if likes[id][poss[pos]] == 0:
-    #             likes[id][poss[pos]] = 1
-    #         else:
-    #             likes[id][poss[pos]] = 0
-    #     elif opc == opcs[2] : pos += 1
-    #     else: invalido()
+        print("Opcion invalida.\nIntrente nuevamente.")
+        print(f"Su {opcion} ya establecida es: ",estudiante.__dict__[dato],"\n ¿Desea cambiarlo?<Si><No>")
+        cambiar=input(">>>").lower()
+
+    if cambiar=="si":
+        aux=input(f"Ingrese su nuevo/a {opcion}:")
+        estudiante.__dict__[dato]=aux
+        pos=busca_estud_id(estudiante.id)
+        l_estudiantes.seek(0,0)
+        vr=pickle.load(l_estudiantes)
+        cant=l_estudiantes.tell()
+        l_estudiantes.seek(cant*pos,0)
+        Format_Estudiante(estudiante)
+        pickle.dump(estudiante,l_estudiantes)
+        l_estudiantes.flush()
+
+
 
 #----------------------------------------------------------------------------------------------------------------------------# 
 #BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      
