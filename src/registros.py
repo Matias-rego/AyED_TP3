@@ -16,6 +16,8 @@ class Estudiantes:
         self.pais =""
         self.ciudad = ""
         self.fecha = ""
+        self.super_like = True
+        self.revelar = True
         
 def Format_Estudiante(x:Estudiantes):
     x.id             = str(x.id)[:4].ljust(4," ")
@@ -80,12 +82,12 @@ class Reportes:
     def __init__(self) -> None:
         self.id_reportado=0
         self.id_reportante=0
-        self.razon=""
-        self.estado = 0
+        self.razon = ""
+        self.estado = "0"
         
 def Format_Reportes(x):
     x.id_reportado  = str(x.id_reportado)[:4].ljust(4," ")
     x.id_reportante = str(x.id_reportante)[:4].ljust(4," ")
-    x.razon         = x.razon[:100].ljust(100," ")
+    x.razon         = x.razon[:49].ljust(49," ")
     x.estado = str(x.estado)[:1].ljust(1," ")
     

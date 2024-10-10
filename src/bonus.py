@@ -1,6 +1,7 @@
 
 from consola import *
 
+from registros import *
 def track_1():
     # var:
     # enteros: i
@@ -26,9 +27,9 @@ def track_1():
         
     for i in range(0,5):
         if edades[i + 1] != edades[i] + 1:
-            print("\ny los huecos estan entre la posicion", i, "y la posicion", i+1, "y el numero faltante es", edades[i] + 1)
+            print("\nLos huecos estan entre la posicion", i, "y la posicion", i+1, "y el numero faltante es", edades[i] + 1)
             
-    getpass("\noprima enter para volver al menu anterior\n", '')
+    getpass("\nOprima enter para volver al menu anterior\n", '')
     clear()
 
 def track_2(estudiantes):
@@ -36,20 +37,25 @@ def track_2(estudiantes):
     # var:
     # enteros: c_est, matcheos, i  
 
-    c_est = 0
-    for i in range(0,8):
-        if estudiantes[i][2] == "ACTIVO":
-            c_est += 1
+    #c_est = 0
+    #for i in range(0,8):
+    #    if estudiantes[i][2] == "ACTIVO":
+    #        c_est += 1
          
-    matcheos = c_est * c_est - c_est
-
+    #matcheos = c_est * c_est - c_est
+    t=os.path.getsize(r_estudiantes)
+    l_estudiantes.seek(0,0)
+    pickle.load(l_estudiantes)
+    x=l_estudiantes.tell()
+    cant=t//x
+    matcheos=(cant*(cant-1))//2
     if matcheos == 0:
         print("No hay match debido a que todos los usuarios estan inactivos.")
     
     else:
         print(f"Existen {matcheos} matcheos posibles")   
     
-    getpass("oprima enter para volver al menu anterior\n", '')
+    getpass("Oprima enter para volver al menu anterior\n", '')
     clear()
 
 def bonus():

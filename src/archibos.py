@@ -136,7 +136,7 @@ def pre_random_likes():
                 if vr.id !=vr2.id:
                     vl.destinatario=vr2.id #se asigna el destinatario del like
                     l_likes.seek(0,2)#posicionamiento del puntero
-                    #desde aca es el guardado del like en cuestion
+                    #desde aca se guarda el like en cuestion
                     format_likes(vl)
                     pickle.dump(vl,l_likes)
                     l_likes.flush()    
@@ -316,7 +316,7 @@ def deshabilitar_estud(id,text= "      ¿Desea eliminar su perfil?    "):
         l_estudiantes.flush()
     else :
         print("Perfil no desactivado.")
-    getpass("oprima enter para volver al menu anterior\n", '')
+    getpass("Oprima enter para volver al menu anterior\n", '')
     clear()
 #-----------------------------------------------------------------------------------------------------------------------------------------------------#
 #CIERRE DE PROGRAMA

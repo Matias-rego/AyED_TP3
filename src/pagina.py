@@ -22,14 +22,14 @@ opc = ""
 pos = 0
 ch  = b''
 
-# areglo donde guardo las opsiones predeterminadas
+# arreglo donde guardo las opciones predeterminadas
 opco = [" << A << ","  Q. salir   ","     L. Quitar Like      "," R. reportar "," >> S >> "] 
-# areglo donde guardo las opsiones que se van a mostrar 
+# arreglo donde guardo las opciones que se van a mostrar 
 opca = opco.copy()
-# areglo donde guardo las opsiones validas que tiene el usuario
+# arreglo donde guardo las opciones validas que tiene el usuario
 opcv = [ b'\r', b'a', b's', b'q', b'l', b'r'] 
 
-# opsion anterior
+# opcion anterior
 preopc = ""
 # plantilla bave
 out1 = f"""
@@ -46,7 +46,7 @@ out1 = f"""
 
 
 while opc != "r":
-    # preparo lo que voy a mostrar y lo dibujo enpantalla 
+    # preparo lo que voy a mostrar y lo dibujo en pantalla 
     out2 = f"""
 ║{VACIO}{opca[0]}{AZUL}║{VACIO}{opca[1]}{AZUL}║{VACIO}{opca[2]}{AZUL}║{VACIO}{opca[3]}{AZUL}║{VACIO}{opca[4]}{AZUL}║
 ╚═════════╩═════════════╩═════════════════════════╩═════════════╩═════════╝{VACIO}
@@ -54,7 +54,7 @@ while opc != "r":
 
     print (out1 +out2)
     
-    # defino las opsiones que tiene el usuario 
+    # defino las opciones que tiene el usuario 
     
     
     # leo y verifico lo que ingresa el usuario
@@ -65,7 +65,7 @@ while opc != "r":
     
     
     opca = opco.copy()
-    # atuo dependiendo de lo que el usuari ingreso      
+    # actuo dependiendo de lo que el usuario ingreso      
     if ch ==  b'\r':
         print("enten")
 

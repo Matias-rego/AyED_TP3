@@ -32,7 +32,9 @@ VERDE    = "\033[1;32m"
 AMARILLO = "\033[1;33m" 
 AZUL     = "\033[1;34m" #Estudiante y logueo
 VIOLETA  = "\033[1;35m" #Administrador
+VIOLETA_S= "\033[4;35m"
 CIAN     = "\033[1;36m" #Moderador
+CIAN_S   = "\033[4;36m"
 BLANCO   = "\033[1;37m"
 DELAY    = 0.02        #DELAY UTILIZADO PARA LAS ANIMACIONES DE PRESENTACION DE MENUS
 #--------------------------------------------FUNCIONES VARIAS--------------------------------------------------#
@@ -133,7 +135,7 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
 #FUNCION PARA VALIDAR CONTRASEÑA, SEGUN LOS PARAMETROS DADOS
 def getpass(ver = False, cartel =True):
     if cartel: 
-        print("ingrese su contraseña de 6 a 16 caracteres:\n(con tab haces visible la contraseña)\n")
+        print("Ingrese su contraseña de 6 a 16 caracteres:\n(con tab haces visible la contraseña)\n")
     password = b''
     print(BLANCO+" (---) "+VERDE+">>"+" "*18+"<<", end="\r", flush=True)
     ch = ""
@@ -184,7 +186,7 @@ def construcción():
     print("Oprima enter para volver al menu anterior\n", end="")
     getch()
     clear()
-#FUNCION QUE CREA UN CARTEL AL REDEDOR DEL NOMBRE DEL MENU
+#FUNCION QUE CREA UN CARTEL ALREDEDOR DEL NOMBRE DEL MENU
 def cartel(text = "", color = VACIO):
     
     print(color+"╔"+"═"*48+"╗")
@@ -218,5 +220,12 @@ if __name__ == "__main__":
     # "9. Opcion9",
     # "0. Salir."]) 
     # print(getpass())
-    
-    validar_fecha()
+    color = CIAN
+    color_s = CIAN_S
+    print(color+"╔"+"═"*73+"╗")
+    print("║ "+BLANCO+"Gestionar reportes".center(71)+color+" ║")
+    print("╠════╦════════╦═════════╦═════════════════════════════════════════════════╣")
+    print("║    ║"+BLANCO+" ID Del "+color+"║"+BLANCO+" ID Del  "+color+"║                                                 ║")
+    print("║"+BLANCO+" N° "+color+"║"+BLANCO+" Emisor "+color+"║"+BLANCO+" Acusado "+color+"║"+BLANCO+"                     Razon                       "+color+"║")
+    print("╠════╩════════╩═════════╩═════════════════════════════════════════════════╣")
+
