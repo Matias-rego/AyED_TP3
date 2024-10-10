@@ -28,13 +28,14 @@ r_reportes        = "src/archivos/reportes.dat"
 def abrir_archivos():
     
     global estudiante, moderador, administrador, like, reporte, l_estudiantes, l_moderadores, l_administradores, l_likes, l_reportes
-
+    #Variables fisicas de los archivos
     estudiante = Estudiantes()
     moderador = Moderadores()
     administrador = Administradores()
     like = Likes()
     reporte = Reportes()
-    
+    #Forma de apertura de los archivos
+    #listo#
     if os.path.exists (r_estudiantes):
         l_estudiantes = open(r_estudiantes, "r+b")
     else:
@@ -66,7 +67,7 @@ def abrir_archivos():
         
 #----------------------------------------------------------------------------------------------------------------------------#  
 # USUARIOS PRECARGADOS 
-def pre_usuario():
+def pre_usuario():#listo#
     usuariogenerico = Estudiantes() # type: ignore
     for i in range(4):
         usuariogenerico.id = i
@@ -85,7 +86,7 @@ def pre_usuario():
         pickle.dump(usuariogenerico, l_estudiantes)
         l_estudiantes.flush()    
 
-def calcular_edad(fecha):
+def calcular_edad(fecha):#listo#
     # (fecha: str)
     # Var:
     # Datatime: fecha_actual ; fecha_nacimiento
@@ -99,7 +100,7 @@ def calcular_edad(fecha):
     return edad
 
 #MODERADOR PRECARGADO
-def pre_mod():
+def pre_mod():#listo#
     mods = Moderadores()
     mods.id = 0
     mods.email = "Modpre@ayed.com"
@@ -112,7 +113,7 @@ def pre_mod():
     l_moderadores.flush()
 
 #ADMIN PRECARGADO
-def pre_admin():
+def pre_admin():#listo#
     admin = Administradores()
     admin.id = 0
     admin.email = "Adminpre@ayed.com"
@@ -123,7 +124,7 @@ def pre_admin():
     l_administradores.flush()
     
 #LIKES ALEATORIOS PRECARGADOS
-def pre_random_likes():
+def pre_random_likes():#listo#
     # calcular tamaño del registro estudiante
     t=os.path.getsize(r_estudiantes)
     l_estudiantes.seek(0,0)
@@ -150,90 +151,90 @@ def pre_random_likes():
                     l_likes.flush()    
 
 #----------------------------------------------------------------------------------------------------------------------------# 
-#BUSQUEDAS DE ARCHIVOS, DE MODERADORES Y DE ESTUDIANTES. LOS ESTUDIANTES PUEDEN SER BUSCADOS POR ID Y POR MAIL. LOS MODERADORES SOLO POR MAIL.      
+#BUSQUEDA DE ESTUDIANTE POR ID
 def busca_estud_id(id):
     global estudiante
-    t=os.path.getsize(r_estudiantes)
+    t=os.path.getsize(r_estudiantes)#tamaño total del archivo
     l_estudiantes.seek(0,0)
     
-    id = str(id).ljust(4," ")
-    pp=0
+    id = str(id).ljust(4," ")#variable que le pasamos como parametro. La ajustamos para que coincida con los usuarios formateados
+    pp=0#variable que va guardando la posicion del puntero
     estudiante=pickle.load(l_estudiantes)
     while l_estudiantes.tell()<t and id!=estudiante.id:
         pp=l_estudiantes.tell()
         estudiante=pickle.load(l_estudiantes)
     if id==estudiante.id:
-        pos=pp
+        pos=pp#Variable de control
     else:
-        pos=-1
+        pos=-1#Variable de control
     
     return pos
-
+#BUSQUEDA DE ESTUDIANTE POR EMAIL
 def busca_estud_email(email):
     global estudiante
-    t=os.path.getsize(r_estudiantes)
-    email = email.ljust(32," ")
+    t=os.path.getsize(r_estudiantes)#tamaño total del archivo
+    email = email.ljust(32," ")#variable que le pasamos como parametro. La ajustamos para que coincida con los usuarios formateados
     
     l_estudiantes.seek(0)
-    pp=0
+    pp=0#variable que va guardando la posicion del puntero
     estudiante=pickle.load(l_estudiantes)
     while l_estudiantes.tell()<t and email!=estudiante.email:
         pp=l_estudiantes.tell()
         estudiante=pickle.load(l_estudiantes)
     if email==estudiante.email:
-        pos=pp
+        pos=pp#Variable de control
     else:
-        pos=-1
+        pos=-1#Variable de control
     
     return pos
-
+#BUSQUEDA DE MODERADOR POR EMAIL
 def busca_mod_email(email):
     global moderador
-    t=os.path.getsize(r_moderadores)
-    email = email.ljust(32," ")
+    t=os.path.getsize(r_moderadores)#tamaño total del archivo
+    email = email.ljust(32," ")#variable que le pasamos como parametro. La ajustamos para que coincida con los usuarios formateados
     
     l_moderadores.seek(0,0)
-    pp=0
+    pp=0#variable que va guardando la posicion del puntero
     moderador=pickle.load(l_moderadores)
     while l_moderadores.tell()<t and email!=moderador.email:
         pp=l_moderadores.tell()
         moderador=pickle.load(l_moderadores)
     if email==moderador.email:
-        pos=pp
+        pos=pp#Variable de control
     else:
-        pos=-1
+        pos=-1#Variable de control
 
     return pos
-
+#BUSQUEDA DE ADMIN(innecesaria, creada por las dudas)
 def busca_admin(email):
     global administrador
-    t=os.path.getsize(r_administradores)
-    email = email.ljust(32," ")
+    t=os.path.getsize(r_administradores)#tamaño total del archivo
+    email = email.ljust(32," ")#variable que le pasamos como parametro. La ajustamos para que coincida con los usuarios formateados
 
     l_administradores.seek(0)
-    pp=0
+    pp=0#variable que va guardando la posicion del puntero
     administrador=pickle.load(l_administradores)
     while l_administradores.tell()<t and email!=administrador.email:
         pp=l_administradores.tell()
         administrador=pickle.load(l_administradores)
     if email==administrador.email:
-        pos=pp
+        pos=pp#Variable de control
     else:
-        pos=-1
+        pos=-1#Variable de control
 
     return pos
-
+#BUSQUEDA DE REPORTES
 def busca_reporte(id_reportante: int, id_reportado: int) -> int:
     global reporte
-    t=os.path.getsize(r_reportes)
+    t=os.path.getsize(r_reportes)#tamaño total del archivo
     
-    pos=-1
+    pos=-1#Variable que retornamos. La iniciamos aca en -1 porque si no hay reportes nunca se define.
     if t >0:
         id_reportante = id_reportante.ljust(4," ")
         id_reportado = id_reportado.ljust(4," ")
         
         l_reportes.seek(0)
-        pp = 0
+        pp = 0#variable que va guardando la posicion del puntero
         reporte = pickle.load(l_reportes)
         
         while l_reportes.tell()<t and (id_reportante != reporte.id_reportante or id_reportado != reporte.id_reportado):
@@ -243,15 +244,15 @@ def busca_reporte(id_reportante: int, id_reportado: int) -> int:
             pos=pp
 
     return pos
-    
+#CANTIDAD DE LIKES DE UN USUARIO   
 def cant_likes(id: int) -> int:
-    t=os.path.getsize(r_likes)
+    t=os.path.getsize(r_likes)#tamaño total del archivo
     l_likes.seek(0,0)
     pickle.load(l_likes)
-    t1=l_likes.tell()
-    cant=t//t1
+    t1=l_likes.tell()#Tamaño en bytes de un registro de likes
+    cant=t//t1#Cantidad de likes del archivo
     
-    n_likes = 0
+    n_likes = 0#Cantidad de likes del usuario
     for i in range(0,cant):
         l_likes.seek(i * t1,0)
         like=pickle.load(l_likes)
@@ -259,43 +260,44 @@ def cant_likes(id: int) -> int:
             n_likes += 1
     
     return n_likes  
-
+#Funcion que verifica si el primer registro le dio like al segundo registro que se le pasa como parametro.
 def is_like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> int:
-    t=os.path.getsize(r_likes)
+    t=os.path.getsize(r_likes)#tamaño total del archivo
 
     l_likes.seek(0,0)
-    pp=0
+    pp=0#variable que va guardando la posicion del puntero
     like=pickle.load(l_likes)
     while l_likes.tell()<t and (estudiante1.id != like.remitente or estudiante2.id != like.destinatario):
         pp=l_likes.tell()
         like=pickle.load(l_likes)
     if (estudiante1.id == like.remitente and estudiante2.id == like.destinatario):
-        pos=pp
+        pos=pp#Variable de control
     else:
-        pos=-1
+        pos=-1#Variable de control
 
     return pos
-
+#Funcion que borra fisicamente del archivo un like
 def quitar_Like(pos) -> None:
-    t=os.path.getsize(r_likes)
+    t=os.path.getsize(r_likes)#Tamaño total del archivo
     l_likes.seek(0,0)
     pickle.load(l_likes)
-    t1=l_likes.tell()
+    t1=l_likes.tell()#Tamaño de iun registro de likes
     
-    l_likes.seek(t-t1,0)
-    like_u=pickle.load(l_likes)
+    l_likes.seek(t-t1,0)#nos ubicamos en el ultimo registro
+    like_u=pickle.load(l_likes)#lo cargamos
     
-    l_likes.seek(pos,0)
-    pickle.dump(like_u,l_likes)
+    l_likes.seek(pos,0)#nos posicionamos en el like el cual pasamos su posicion para eliminar
+    pickle.dump(like_u,l_likes)#lo pisamos con el que habiamos guardado
     
-    l_likes.truncate(t-t1)
-    l_likes.flush()
+    l_likes.truncate(t-t1)#Truncamos el tamaño del archivo, eliminando el ultimo registro
+    l_likes.flush()#Actualizamos
 
-def dar_Like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> None:
+#Funcion dar like
+def dar_Like(estudiante1:Estudiantes,estudiante2:Estudiantes) -> None:#pasamos dos estudiantes como parametro
     like = Likes()
-    like.remitente = estudiante1.id 
+    like.remitente = estudiante1.id #asignamos cada uno, segun el que emite el like
     like.destinatario = estudiante2.id
-    
+    #Guardamos
     format_likes(like)
     l_likes.seek(0,2)
     pickle.dump(like,l_likes)
@@ -342,7 +344,8 @@ def menu_logueo():
 
 def is_login(email:str, password:str)-> str:
     # Var
-    # Entero:i
+    # Entero:i, pos
+    # 
     global estudiante, moderador, administrador
     email = email.ljust(32," ")
 
@@ -533,27 +536,26 @@ def desactivar_mod():
         pickle.dump(vm,l_moderadores)
         l_moderadores.flush()
         
-        
-        
-        
-        
-def validacion_mail(text):
+def validacion_email(text: str,color = AZUL) -> str:                                        # listo
+    # var
+    # String: email
+    # int: val, i 
     #----------------Validacion de <@> del email------------------#
     print("Ingrese su email:")
-    email=input(VIOLETA+"\n>>> \033"+VACIO)
+    email=input(AZUL+"\n>>> \033"+VACIO)
     val=0
     for i in range(len(email)):
         if email[i]=="@":
             val += 1 
     while val!=1:
         clear()
-        cartel(text,VIOLETA)
+        cartel(text,color)
         if val>1:
             print("No existen emails con mas de un <@>.\nIntente nuevamente.")
         else:   
             print("No existen emails sin <@>.\nIntente nuevamente.")
         print("Ingrese su email:")
-        email=input(VIOLETA+"\n>>> \033"+VACIO)
+        email=input(AZUL+"\n>>> \033"+VACIO)
         val=0
         for i in range(len(email)):
             if email[i]=="@":
@@ -562,10 +564,10 @@ def validacion_mail(text):
     
     while busca_estud_email(email) !=-1 and busca_mod_email(email) !=-1:
         clear()
-        cartel(text,VIOLETA)
+        cartel(text,color)
         print("Email ya utlizado.\nIntente con uno nuevo.")
         print("Ingrese su email:")
-        email=input(VIOLETA+"\n>>> \033"+VACIO)
+        email=input(AZUL+"\n>>> \033"+VACIO)
         #------------Validacion de <@> del email---------------------#
         val=0
         for i in range(len(email)):
@@ -573,127 +575,71 @@ def validacion_mail(text):
                 val += 1 
         while val!=1:
             clear()
-            cartel(text,VIOLETA)
+            cartel(text,color)
             if val>1:
                 print("No existen emails con mas de un <@>.\nIntente nuevamente.")
             else:   
                 print("No existen emails sin <@>.\nIntente nuevamente.")
             print("Ingrese su email:")
-            email=input(VIOLETA+"\n>>> \033"+VACIO)
+            email=input(AZUL+"\n>>> \033"+VACIO)
             val=0
             for i in range(len(email)):
                 if email[i]=="@":
                     val += 1   
     return email
            
-def alta_mod(text="<          Registro Moderador         >"):
+def alta_mod() -> None:                                                        # listo
+    # var
+    # Estudiantes: vm, vr
+    # String: text
+    # int: t, x, cant
+    
+    text="Registro Moderador"
+    vm=Moderadores()
     clear()
     cartel(text,VIOLETA)
-    vm=Moderadores()
     
-    vm.email=validacion_mail(text)
+    vm.email=validacion_email(text, VIOLETA)
+    
     #------------------------Contraseña-------------------------#
     clear()
     cartel(text,VIOLETA)
     vm.contraseña = getpass()
-    #----------------------Nombre--------------------------------#
+    
+    #----------------------Nombre-------------------------------#
     print("Ingrese su nombre")
-    name=input(VIOLETA+"\n>>> \033"+VACIO)
-    vm.name=name
-   #---------------Elementos de asignacion automatica------------------#    
-    vm.estado=True
-    t=os.path.getsize(r_moderadores)
+    vm.name = input(VIOLETA+"\n>>> \033"+VACIO)
+    
+   #---------------Elementos de asignacion automatica-----------#    
+    vm.estado = True
+    t = os.path.getsize(r_moderadores)
     l_moderadores.seek(0,0)
-    aux=pickle.load(l_moderadores)
-    x=l_moderadores.tell()
-    cant=t//x
+    vr = pickle.load(l_moderadores)
+    x = l_moderadores.tell()
+    cant = t//x
     l_moderadores.seek((cant-1)*x,0)
-    vr=pickle.load(l_moderadores)
-    id_siguiente=int(vr.id)+1
-    vm.id=id_siguiente
-    #------------Archivar el moderador cargado-----------------------#
+    vr = pickle.load(l_moderadores)
+    vm.id = int(vr.id)+1
+    
+    #------------Archivar el moderador cargado------------------#
     Format_Mods(vm)
     l_moderadores.seek(0,2)
     pickle.dump(vm,l_moderadores)
     l_moderadores.flush()
-    #---------------------------------------------------------------#     
+    #-----------------------------------------------------------#     
 
-def menu_reportes_estadisticos_admin():
-    clear()
-    cartel("Menu de Reportes Estadisticos",VIOLETA)
-    print(VIOLETA+"\n° "+VACIO+"Cantidad de reportes realizados por los estudiantes: ",cant_rep_totales())
-    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes ignorados: ",cant_rep_por_estado("2"))
-    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes aceptados: ",cant_rep_por_estado("1"))
-    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha ignorado : ",mod_con_mas_x_estado("reportes_ignorados","ignorado"))
-    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha aceptado : ",mod_con_mas_x_estado("reportes_aceptados","aceptado"))
-    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha procesado: ",cant_rep_mod())
-    print("\nOprima cualquier tecla para volver al menu anterior\n")
-    getch()
-   
-def cant_rep_totales():
-    t=os.path.getsize(r_reportes)
-    l_reportes.seek(0,0)
-    pickle.load(l_reportes)
-    x=l_reportes.tell()#longitud de un registro de reportes
-    cantidad=t//x
-    return cantidad
-
-def cant_rep_por_estado(estado:str):
-    x=cant_rep_totales()
-    i=0
+def menu_registrarse() -> None:                                                # listo
+    # var 
+    # Estudiantes: va, vr
+    # int: t, x, cant
+    # String: seguir, text
     
-    for k in range(x):
-        l_reportes.seek(0,0)
-        vr=pickle.load(l_reportes)
-        if vr.estado==estado:
-            i += 1
-        
-    return (i*100)/x
-
-def mod_con_mas_x_estado(estado:str,name:str):
-    t=os.path.getsize(r_moderadores)
-    
-    salida = "" 
-    i=1
-    l_moderadores.seek(0,0)
-    while l_moderadores.tell()<t:        
-        mod=pickle.load(l_moderadores)
-        if int(mod.__dict__[estado])>i:
-            i=int(mod.__dict__[estado])
-            salida = mod.name
-        elif int(mod.__dict__[estado]) == i:
-            salida = salida + ", " + mod.name
-            
-    if salida=="":
-        salida = f"No se han {name} reportes"
-
-    return salida
-
-def cant_rep_mod():
-    t=os.path.getsize(r_moderadores)
-    
-    salida=""
-    i=1
-    l_moderadores.seek(0,0)
-    while l_moderadores.tell()<t:
-        mod=pickle.load(l_moderadores)
-        if int(mod.reportes_aceptados)+int(mod.reportes_ignorados)>i:
-            i=int(mod.reportes_aceptados)+int(mod.reportes_ignorados)
-            salida=mod.name
-        elif int(mod.reportes_aceptados)+int(mod.reportes_ignorados) == i:
-            salida = salida + ", " + mod.name
-            
-    if salida=="":
-        salida = "No se han visto reportes"
-    
-    return salida
-
-def menu_registrarse(text="<          Registro           >"):
+    text = "Registro"
     clear()
     cartel(text,AZUL)
     ve=Estudiantes()
     
-    ve.email=validacion_mail(text)
+    ve.email=validacion_email(text)
     #------------------------Contraseña-------------------------#
     clear()
     cartel(text,AZUL)
@@ -704,17 +650,12 @@ def menu_registrarse(text="<          Registro           >"):
     print("Ingrese su nombre:")
     ve.name = input(AZUL+"\n>>> "+VACIO)
     
-    clear()
-    cartel(text,AZUL)
-    print("Ingrese su sexo <M> <F>:")
-    sexo=input(AZUL+"\n>>> "+VACIO).lower()
-    while sexo!="m" and sexo!="f":
-        clear()
-        cartel(text,AZUL)
-        print("Sexo invalido.\nIntente nuevamente.")
-        print("Ingrese su sexo <M> <F>:")
-        sexo=input(AZUL+"\n>>> "+VACIO).lower()
-    ve.sexo=sexo
+    clear()    
+    ve.sexo = menu(text, "Ingrese su sexo",
+                ["f. Femenino.",
+                "m. Masculino.",
+                "","","","","","","",""],AZUL)
+    
     #-------------------Fecha nacimiento----------------------------#
     clear()
     cartel(text,AZUL)
@@ -722,14 +663,12 @@ def menu_registrarse(text="<          Registro           >"):
     
     #------------------Demas datos--------------------------------# 
     clear()
-    cartel("¿Desea terminar de completar tus datos personales ahora?(<Si> <No>)",AZUL)
-    seguir=input(AZUL+"\n>>> "+VACIO).lower()
-    while seguir!="si" and seguir!="no":
-        clear()
-        cartel("¿Desea terminar de completar sus datos personales ahora?(<Si> <No>)",AZUL)
-        print("Opcion invalida.\nIntente nuevamente.")
-        seguir=input(AZUL+"\n>>> "+VACIO).lower()
-    if seguir=="si":
+    seguir = menu(text,"¿Desea terminar de completar tus datos personales ahora?"
+        ["s. Si",
+        "n. No.",
+        "","","","","","","",""],AZUL)
+    
+    if seguir=="s":
         clear()
         cartel(text,AZUL)
         print("Ingrese su materia favorita:")
@@ -754,18 +693,103 @@ def menu_registrarse(text="<          Registro           >"):
     ve.estado=True
     t=os.path.getsize(r_estudiantes)
     l_estudiantes.seek(0,0)
-    aux=pickle.load(l_estudiantes)
+    vr=pickle.load(l_estudiantes)
     x=l_estudiantes.tell()
     cant=t//x
     l_estudiantes.seek((cant-1)*x,0)
     vr=pickle.load(l_estudiantes)
-    id_siguiente=int(vr.id)+1
-    ve.id=id_siguiente
+    ve.id = int(vr.id)+1
+    
     #------------Archivar el estudiante cargado-----------------------#
     Format_Estudiante(ve)
     l_estudiantes.seek(0,2)
     pickle.dump(ve,l_estudiantes)
     l_estudiantes.flush()
+
+def menu_reportes_estadisticos_admin() -> None:                                # listo
+    clear()
+    cartel("Menu de Reportes Estadisticos",VIOLETA)
+    print(VIOLETA+"\n° "+VACIO+"Cantidad de reportes realizados por los estudiantes: ",cant_rep_totales())
+    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes ignorados: ",cant_rep_por_estado("2"))
+    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes aceptados: ",cant_rep_por_estado("1"))
+    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha ignorado : ",mod_con_mas_x_estado("reportes_ignorados","ignorado"))
+    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha aceptado : ",mod_con_mas_x_estado("reportes_aceptados","aceptado"))
+    print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha procesado: ",cant_rep_mod())
+    print("\nOprima cualquier tecla para volver al menu anterior\n")
+    getch()
+   
+def cant_rep_totales() -> int:                                                 # listo
+    # var
+    # int: t, x
+    t=os.path.getsize(r_reportes)
+    l_reportes.seek(0,0)
+    pickle.load(l_reportes)
+    x=l_reportes.tell()#longitud de un registro de reportes
+    return t//x
+
+def cant_rep_por_estado(estado:str) -> int:                                    # listo
+    # var 
+    # int: x, i, k
+    # Reportes: vr
+    
+    x=cant_rep_totales()
+    i=0
+    
+    for k in range(x):
+        l_reportes.seek(0,0)
+        vr=pickle.load(l_reportes)
+        if vr.estado==estado:
+            i += 1
+        
+    return (i*100)/x
+
+def mod_con_mas_x_estado(estado:str,name:str) -> str:                          # listo
+    # var 
+    # int: t, i
+    # String: salida
+    # Moderadores: mod
+    
+    t=os.path.getsize(r_moderadores)
+    
+    salida = "" 
+    i=1
+    l_moderadores.seek(0,0)
+    while l_moderadores.tell()<t:        
+        mod=pickle.load(l_moderadores)
+        if int(mod.__dict__[estado])>i:
+            i=int(mod.__dict__[estado])
+            salida = mod.name
+        elif int(mod.__dict__[estado]) == i:
+            salida = salida + ", " + mod.name
+            
+    if salida=="":
+        salida = f"No se han {name} reportes"
+
+    return salida
+
+def cant_rep_mod() -> str:                                                     # listo
+    # var 
+    # int: t, i
+    # String: salida
+    # Moderadores: mod
+    
+    t=os.path.getsize(r_moderadores)
+    
+    salida=""
+    i=1
+    l_moderadores.seek(0,0)
+    while l_moderadores.tell()<t:
+        mod=pickle.load(l_moderadores)
+        if int(mod.reportes_aceptados)+int(mod.reportes_ignorados)>i:
+            i=int(mod.reportes_aceptados)+int(mod.reportes_ignorados)
+            salida=mod.name
+        elif int(mod.reportes_aceptados)+int(mod.reportes_ignorados) == i:
+            salida = salida + ", " + mod.name
+            
+    if salida=="":
+        salida = "No se han visto reportes"
+    
+    return salida
 
 #-----------------------------------------------------------#
 # menu Gestionar mi perfil de nivel 2 dentro de menu estudiantes   
@@ -790,7 +814,8 @@ def menu_perfil(estudiante:Estudiantes) -> None:                               #
 
 def menu_editar_datos(estudiante:Estudiantes) -> None:                         # listo
     # var:
-    # String: opc
+    # String: opc, estab
+    # int: pos
     
     opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
     
@@ -835,7 +860,7 @@ def menu_editar_datos(estudiante:Estudiantes) -> None:                         #
                     opc = menu("Cambio del dato sexo",f"Su sexo ya establecida es: {estab}.\n¿Desea cambiarlo o volver?",
                        ["f. Femenino.",
                         "m. Masculino.",
-                        "o. Volver (no cambiar).",""
+                        "o. Volver (no cambiar).",
                         "","","","","","",""],AZUL)
                     
                     if opc != "o":
@@ -869,7 +894,6 @@ def cambio_dato_estudiante(dato:str,estudiante:Estudiantes,opcion:str) -> None:#
         estudiante.__dict__[dato] = input(AZUL+"\n>>> "+VACIO)
 
 # menu Gestionar candidatos de nivel 2 dentro de menu estudiantes 
-
 def menu_candidatos(estudiante:Estudiantes) -> None:                           #listo
     # var:
     # String: opc
@@ -880,31 +904,37 @@ def menu_candidatos(estudiante:Estudiantes) -> None:                           #
             opc = menu("Gestionar candidatos","",[
                 "1. Ver candidatos.",
                 "2. Reportar un candidato.",
-                "3. Bonus Track 1.",
-                "4. Revelar Candidatos.",
+                "3. Revelar Candidatos.",
                 "0. Volver.",
-                "","","","",""],
+                "","","","","",""],
                 AZUL)  
         else:
             opc = menu("Gestionar candidatos","",[
                 "1. Ver candidatos.",
                 "2. Reportar un candidato.",
-                "3. Bonus Track 1.",
-                "0. Volver",
-                "","","","","",""],
+                "0. Volver.",
+                "","","","","","",""],
                 AZUL)
             
         match opc:
             case "1": menu_ver_candidatos(estudiante)
             case "2": menu_reportar(estudiante)
-            case "4": bonus3(estudiante)
-            case "3": bonus1_muestra()
+            case "3": bonus3(estudiante)
 #--------------------Listado de candidatos------------------------------#
 def menu_ver_candidatos(estudiante:Estudiantes) -> None:                       #listo 
+    #
+    # type:
+    #   A_5_str = array[0..4] of String
+    #   A_6_str = array[0..5] of String
+    #   A_5_int = array[0..4] of int
+    
     # var:
     # String: ch, prech
-    # Entero: t, t1, min, max, pos, pp
-    # Arreglo:poss, opcs, 
+    # Entero: t, t1, min, max, pos, pp, i
+    # Estudiantes: estud
+    # A_6_str: opcv
+    # A_5_str: opcs 
+    # A_5_int: estados
     
     t=os.path.getsize(r_estudiantes)
     l_estudiantes.seek(0,0)
@@ -1135,11 +1165,11 @@ def menu_ver_candidatos(estudiante:Estudiantes) -> None:                       #
     l_estudiantes.flush()
 
 #-----------Bonus 3----------------#
-def bonus3(ve:Estudiantes):
-    ve2=Estudiantes()
-    t=os.path.getsize(r_estudiantes)
+def bonus3(ve:Estudiantes) -> None:
+    ve2=Estudiantes()#Defino el tipo de variable
+    t=os.path.getsize(r_estudiantes)#Tamaño total del archivo
     l_estudiantes.seek(0,0)
-    cont=1
+    cont=1#Inicializo un contador para mostrar solo 4
     while l_estudiantes.tell()<t:
         ve2=pickle.load(l_estudiantes)
         if is_like(ve,ve2)==-1 and is_like(ve2,ve)!=-1:
@@ -1147,16 +1177,23 @@ def bonus3(ve:Estudiantes):
             cont+=1
         if cont==4:
             l_estudiantes.seek(t,0)
-    cartel("Usted no podra acceder a esta opcion de nuevo.\nPresione cualquier tecla para volver",AZUL)
+    if cont==1:
+        print("Nadie le ha dado like")
+        cartel("Usted podra acceder a esta opcion hasta que se pueda mostrar al menos una persona que le haya dado like.",AZUL)
+    if cont!=1:
+        ve.revelar=False
+        pickle.dump(ve,l_estudiantes)
+        l_estudiantes.flush()
+        cartel("Usted no podra acceder a esta opcion de nuevo.\nPresione cualquier tecla para volver.",AZUL)
     getch()
-    ve.revelar=False
-    pickle.dump(ve,l_estudiantes)
-    l_estudiantes.flush()
+    
     
 def menu_reportar(estudiante:Estudiantes) -> None:                             #listo
     # Var
-    # String: email, razon
-    # Entero: id
+    # String: email, opc, men
+    # Entero: pos, id, pos_r
+    # Estudiantes: estud
+    # Reportes: reporte
     
     clear()
     opc = menu("Reportar estudiante","Seleccione el metodo que quiere utilizar.",[
@@ -1179,8 +1216,8 @@ def menu_reportar(estudiante:Estudiantes) -> None:                             #
                 print("Ingrese el id del estudiante que desea reportar. ")
                 try:
                     men = "Dato Invalido."
-                    user = int(input(AZUL+"\n>>> "+VACIO))
-                    pos = busca_estud_id(user)
+                    id = int(input(AZUL+"\n>>> "+VACIO))
+                    pos = busca_estud_id(id)
                     men = "Id no encontrado."
                     if pos != -1:
                         l_estudiantes.seek(pos,0)
@@ -1195,8 +1232,8 @@ def menu_reportar(estudiante:Estudiantes) -> None:                             #
                     
             else:
                 print("Ingrese el email del estudiante que desea reportar.")
-                user = input(AZUL+"\n>>> "+VACIO)
-                pos = busca_estud_email(user)
+                email = input(AZUL+"\n>>> "+VACIO)
+                pos = busca_estud_email(email)
                 men = "Id no encontrado."
                 if pos != -1:
                     l_estudiantes.seek(pos,0)
@@ -1228,6 +1265,11 @@ def menu_reportar(estudiante:Estudiantes) -> None:                             #
                 reporte.razon = input(AZUL+"\n>>> "+VACIO)
                 reporte.id_reportado = estud.id
                 reporte.id_reportante = estudiante.id
+                
+                l_reportes.seek(0,2)
+                Format_Reportes(reporte)
+                pickle.dump(reporte,l_reportes)
+                l_reportes.flush()
                     
         else:
             l_reportes.seek(pos_r)
@@ -1245,10 +1287,7 @@ def menu_reportar(estudiante:Estudiantes) -> None:                             #
                 case "1": print("Ha sido exitoso")
                 case "2": print("Ha sido ignorado")
             
-            l_reportes.seek(0,2)
-            Format_Reportes(reporte)
-            pickle.dump(reporte,l_reportes)
-            l_reportes.flush()
+            
             
             print("Oprima cualquier tecla para volver al menu anterior\n")
             getch()
@@ -1276,6 +1315,7 @@ def menu_Matcheos() -> None:                                                   #
 def menu_reportes_estadisticos(estudiante) -> None:                            # listo
     # Var
     # Entero: cont_like, like_norec, like_nodev, c_est
+    # Estudiantes: estud
     # float: por_match
     clear()
     cont_like = 0
@@ -1289,7 +1329,7 @@ def menu_reportes_estadisticos(estudiante) -> None:                            #
 
     while l_estudiantes.tell() < t:
         estud=pickle.load(l_estudiantes)
-        if estud.estado:
+        if estud.estado and estud.id != estudiante.id:
             c_est+=1
             
         
@@ -1312,37 +1352,7 @@ def menu_reportes_estadisticos(estudiante) -> None:                            #
     print("\nOprima cualquier tecla para volver al menu anterior\n")
     getch()
    
-#---------------------BONUS TP3------------------------------#
-#------------BONUS 1------------------#
-def bonus1_puntuacion(ve:Estudiantes):
-    ve2=Estudiantes()
-    t=os.path.getsize(r_estudiantes)
-    l_estudiantes.seek(0,0)
-    puntaje=0
-    cont=0
-    while l_estudiantes.tell()<t:
-        ve2=pickle.load(l_estudiantes)
-        if is_like(ve,ve2)!=-1 and is_like(ve2,ve)!=-1:
-            puntaje+=1
-            cont+=1
-        if is_like(ve,ve2)!=-1 and is_like(ve2,ve)==-1:
-            puntaje-=1
-            cont=0
-        if cont>=3:
-            puntaje+=1
-    
-    return puntaje
-def bonus1_muestra():
-    t=os.path.getsize(r_estudiantes)
-    l_estudiantes.seek(0,0)
-    pickle.load(l_estudiantes)
-    x=l_estudiantes.tell()
-    cant=t//x
-    l_estudiantes.seek(0,0)
-    ve=Estudiantes()
-    for i in range(cant):
-        ve=pickle.load(l_estudiantes)
-        print("El estudiante ",ve.name," id numero ",ve.id," tiene un puntaje de: ",bonus1_puntuacion(ve),"\n")
+
 #----------------------------------------------------------------------------#
 # menu Gestionar usuarios de nivel 2 dentro de menu moderadores 
 def menu_gest_usuario(color = CIAN) -> None:                                   # listo
@@ -1376,15 +1386,19 @@ def menu_desactivar_usuario(color = CIAN) -> None:                             #
     if opc != "0":
         
         pos = -1
-        clear()
+        men=""
         while pos < 0:
+            clear()
             cartel("Desactivar usuario ", color)
+            print(AMARILLO+men+VACIO)
             
             if opc == "1":
                 print("Ingrese el id del usuario que desea desactivar: ")
                 try:
+                    men = "Dato Invalido."
                     user = int(input(AZUL+"\n>>> "+VACIO))
                     pos = busca_estud_id(user)
+                    men = "Id no encontrado."
                     if pos != -1:
                         l_estudiantes.seek(pos,0)
                         estudiante = pickle.load(l_estudiantes)
@@ -1396,11 +1410,13 @@ def menu_desactivar_usuario(color = CIAN) -> None:                             #
                 print("Ingrese el email del usuario que desea desactivar: ")
                 user = input(AZUL+"\n>>> "+VACIO)
                 pos = busca_estud_email(user)
+                men = "Email no encontrado."
                 if pos != -1:
                     l_estudiantes.seek(pos,0)
                     estudiante = pickle.load(l_estudiantes)
                     if estudiante.estado == False:
-                        pos = -1 
+                        pos = -1
+
                 
             invalido()
         clear()
@@ -1412,10 +1428,8 @@ def menu_desactivar_usuario(color = CIAN) -> None:                             #
         print("Oprima cualquier tecla para volver al menu anterior")
         getch()
     
-
-
 # menu Gestionar reportes de nivel 2 dentro de menu moderadores 
-def menu_gest_reportes(id: int,is_mod = True) :
+def menu_gest_reportes(id: int,is_mod = True) -> None:                         # listo
     # Var
     # String: opc
     opc= ""
@@ -1430,16 +1444,24 @@ def menu_gest_reportes(id: int,is_mod = True) :
 
         if opc == "1": menu_reportes(id, is_mod)
   
-def menu_reportes(id: int,is_mod = True):
-    #Var
-    #Entero:j, i, n
-    #String: rta
+def menu_reportes(id: int,is_mod = True) -> None:
+    #
+    # type:
+    # A_99_int = array[0..99] of int
+    
+    # Var
+    # Entero: t1_r, i, n_reportes, t, pp, t1_e, _t1_m
+    # String: opc, salida, color
+    # A_99_int: array_reporte
+    # Reportes: reporte
+    # Estudiantes: estud1, estud2
+    # Moderadores: mod
+    
     
     if is_mod:
         color = CIAN
     else:
         color = VIOLETA
-    
         
     opc = ""
     while opc != "n":
@@ -1502,7 +1524,7 @@ def menu_reportes(id: int,is_mod = True):
             pickle.load(l_estudiantes)
             t1_e=l_estudiantes.tell()
             
-            l_reportes.seek(n*t1_r,0)
+            l_reportes.seek(array_reporte[n]*t1_r,0)
             reporte = pickle.load(l_reportes)
             
             l_estudiantes.seek(reporte.id_reportante*t1_e,0)
@@ -1553,7 +1575,7 @@ def menu_reportes(id: int,is_mod = True):
                 else : 
                     reporte.estado = "2"      
                 
-            l_reportes.seek(n*t1_r,0)
+            l_reportes.seek(array_reporte[n]*t1_r,0)
             pickle.dump(reporte,l_reportes)
             l_reportes.flush()
                      
@@ -1573,10 +1595,9 @@ def menu_reportes(id: int,is_mod = True):
             getch()
     clear()
 
-
-abrir_archivos()
+abrir_archivos()#Llamamos a funcion para crear o abrir archivos
+#-----------MENU PRINCIPAL DEL PROGRAMA--------------#
 opc = ""
-
 while opc!="0":
     clear()    
     # Mostramos el menu de login

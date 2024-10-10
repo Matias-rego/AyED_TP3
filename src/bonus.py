@@ -1,7 +1,8 @@
 
 from consola import *
-
+from main import *
 from registros import *
+#---------------Bonus TP2-----------------#
 def track_1():
     # var:
     # enteros: i
@@ -31,7 +32,6 @@ def track_1():
             
     getpass("\nOprima enter para volver al menu anterior\n", '')
     clear()
-
 def track_2(estudiantes):
     # (estudiantes: M_8x8_str)
     # var:
@@ -57,27 +57,6 @@ def track_2(estudiantes):
     
     getpass("Oprima enter para volver al menu anterior\n", '')
     clear()
-
-def bonus():
-    # var: 
-    # String: opc
-    opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
-    
-    while opc!="0":
-        clear()  
-        opc = menu("Bonus track","",[
-            "1. Bonus track 1.",
-            "2. Bonus track 2.",
-            "0. Salir.",
-            "","","","","","",""],
-        AZUL)
-         
-        match opc:
-            case "1": track_1()            
-            case "2": track_2()            
-            case "0": clear()
-            case  _ : invalido()
-
 def ordenamiento(x):
     # (x: M_6_int)
     # var:
@@ -90,4 +69,64 @@ def ordenamiento(x):
                 aux = x[i]
                 x[i] = x[j]
                 x[j] = aux
-            
+
+#------------MENU BONUS-------------#
+def bonus():
+    # var: 
+    # String: opc
+    opc = "" # así lo obligo a entrar al mientras y lo convierto en un Repetir
+    
+    while opc!="0":
+        clear()  
+        opc = menu("Bonus track","",[
+            "1. Bonus track 1 (TP2).",
+            "2. Bonus track 2 (TP2).",
+            "3. Bonus track 1 (TP3).",
+            "","","","","","",""],
+        AZUL)
+         
+        match opc:
+            case "1": track_1()            
+            case "2": track_2()            
+            case "0": clear()
+            case  _ : invalido()
+            case "3": bonus1_muestra()
+
+
+
+
+#---------------------BONUS TP3------------------------------#
+#------------BONUS 1------------------#
+def bonus1_puntuacion(ve:Estudiantes):
+    ve2=Estudiantes()
+    t=os.path.getsize(r_estudiantes)
+    l_estudiantes.seek(0,0)
+    puntaje=0
+    cont=0
+    while l_estudiantes.tell()<t:
+        ve2=pickle.load(l_estudiantes)
+        if is_like(ve,ve2)!=-1 and is_like(ve2,ve)!=-1:
+            puntaje+=1
+            cont+=1
+        if is_like(ve,ve2)!=-1 and is_like(ve2,ve)==-1:
+            puntaje-=1
+            cont=0
+        if cont>=3:
+            puntaje+=1
+    
+    return puntaje
+def bonus1_muestra():
+    t=os.path.getsize(r_estudiantes)
+    l_estudiantes.seek(0,0)
+    pickle.load(l_estudiantes)
+    x=l_estudiantes.tell()
+    cant=t//x
+    cartel("Bonus 1",AZUL)
+    print("╠════╦═════════════════╦═══════")
+    for i in range(cant):
+        l_estudiantes.seek(i*x,0)
+        ve=pickle.load(l_estudiantes)
+        print("ID ",ve.id," Estudiante ",ve.name," tiene un puntaje de: ",bonus1_puntuacion(ve).ljust(4," "),"\n")
+
+    print("Oprima cualquier tecla para volver al menu anterior\n")
+    getch()            
