@@ -11,7 +11,7 @@ esudiantes =[
     ["estudiante3@ayed.com","222333", "estudiante3","soy el estudiante 3","Bailar, cocinar","",""],
     ["estudiante4@ayed.com","333444", "estudiante4","soy el estudiante 4","Jugar Videojuegos y leer","",""],
     ["Adminpre@ayed.com","000000", "estudiante5","soy el estudiante 5","Estudiar matematicas","",""],
-    ["estudiante6@ayed.com","666", "estudiante6","soy el estudiante 6","Aprender nuevos idiomas","",""],
+    ["Modpre@ayed.com","666", "estudiante6","soy el estudiante 6","Aprender nuevos idiomas","",""],
     ["estudiante7@ayed.com","777", "estudiante7","soy el estudiante 7","Conocer nuevos lugares","",""],
     ["estudiante8@ayed.com","888", "estudiante8","soy el estudiante 8","Hacer amigos nuevos","",""],
 ]

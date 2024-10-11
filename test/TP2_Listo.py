@@ -722,7 +722,7 @@ def ORDENAR(edades):
 
 # indice_usuarios===>contador de usuarios registrados;variable global
 def CANT_MATCHEOS_POSIBLES(indice_usuarios):
-	r=indice_usuarios*(indice_usuarios-1)
+	r=(indice_usuarios*(indice_usuarios-1))//2
 	return r
 
 

@@ -42,7 +42,7 @@ DELAY    = 0.02        #DELAY UTILIZADO PARA LAS ANIMACIONES DE PRESENTACION DE 
 def validar_fecha():
     # Var:
     # String: fecha_nacimiento
-    # Bool: ok
+    # Bool: valida
     valida = False      
     cartel("      Introduzca su fecha de nacimiento          En formato DD/MM/YYYY", AZUL)
     while not valida:
@@ -62,9 +62,15 @@ def validar_fecha():
             print("Fecha inválida")
     return fecha_nacimiento
 #FUNCION QUE AUTOGENERA MENUS, PASANDOLE EL TEXTO REQUERIDO
-def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO):
+def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO) -> str:
+    # Var:
+    # int: copc, i, j
+    # Array[*10]; opcs
+    # str: opc, preopc
+    # bool: ispreopc
     
     # clear()
+    # modelo de uso
     # opc = menu("Menu","",[
     # "1. opc1.",
     # "2. opc2.",
@@ -133,7 +139,12 @@ def menu(text = "menu",suptext="Ingrese la opcion:", opcs=[""]*10, color = VACIO
     return preopc
 
 #FUNCION PARA VALIDAR CONTRASEÑA, SEGUN LOS PARAMETROS DADOS
-def getpass(ver = False, cartel =True):
+def getpass(ver = False, cartel = True) -> str:
+    # Var:
+    # str: ch, men, p, password
+    # bool: ver, cartel
+    # int: i, l
+    
     if cartel: 
         print("Ingrese su contraseña de 6 a 16 caracteres:\n(con tab haces visible la contraseña)\n")
     password = b''
@@ -183,11 +194,13 @@ def invalido():
 def construcción():
     clear()
     cartel("En Construcción... ", AMARILLO)
-    print("Oprima enter para volver al menu anterior\n", end="")
+    print("Oprima cualquier tecla para volver al menu anterior\n")
     getch()
     clear()
 #FUNCION QUE CREA UN CARTEL ALREDEDOR DEL NOMBRE DEL MENU
 def cartel(text = "", color = VACIO):
+    # Var:
+    # int: inf, med
     
     print(color+"╔"+"═"*48+"╗")
  
@@ -204,28 +217,4 @@ def cartel(text = "", color = VACIO):
     
     print(color+"╚"+"═"*48+"╝"+VACIO)
 
-    
-
-if __name__ == "__main__":
-    
-    # opc = menu("Menu principal", opcs=[
-    # "1. Gestionar mi perfil.",
-    # "2. Gestionar candidatos.",
-    # "3. Matcheos.",
-    # "4. Reportes estadísticos.",
-    # "5. Opcion5",
-    # "6. Opcion6",
-    # "7. Opcion7",
-    # "8. Opcion8",
-    # "9. Opcion9",
-    # "0. Salir."]) 
-    # print(getpass())
-    color = CIAN
-    color_s = CIAN_S
-    print(color+"╔"+"═"*73+"╗")
-    print("║ "+BLANCO+"Gestionar reportes".center(71)+color+" ║")
-    print("╠════╦════════╦═════════╦═════════════════════════════════════════════════╣")
-    print("║    ║"+BLANCO+" ID Del "+color+"║"+BLANCO+" ID Del  "+color+"║                                                 ║")
-    print("║"+BLANCO+" N° "+color+"║"+BLANCO+" Emisor "+color+"║"+BLANCO+" Acusado "+color+"║"+BLANCO+"                     Razon                       "+color+"║")
-    print("╠════╩════════╩═════════╩═════════════════════════════════════════════════╣")
-
+ 
