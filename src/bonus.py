@@ -82,14 +82,13 @@ def bonus():
             "1. Bonus track 1 (TP2).",
             "2. Bonus track 2 (TP2).",
             "3. Bonus track 1 (TP3).",
-            "","","","","","",""],
+            "0. Volver.",
+            "","","","","",""],
         AZUL)
          
         match opc:
             case "1": track_1()            
             case "2": track_2()            
-            case "0": clear()
-            case  _ : invalido()
             case "3": bonus1_muestra()
 
 
@@ -122,7 +121,11 @@ def bonus1_muestra():
     x=l_estudiantes.tell()
     cant=t//x
     cartel("Bonus 1",AZUL)
-    print("╠════╦═════════════════╦═══════")
+    
+    #salida += color+"╔"+"═"*73+"╗\n"
+    #salida += "║ "+BLANCO+"Gestionar reportes".center(71)+color+" ║\n"
+    #salida += "╠════╦════════╦═════════╦═════════════════════════════════════════════════╣\n"
+    print(color+"╔"+"═"*48+"╗\n")
     for i in range(cant):
         l_estudiantes.seek(i*x,0)
         ve=pickle.load(l_estudiantes)

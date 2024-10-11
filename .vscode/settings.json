@@ -1,5 +1,5 @@
 {
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.typeCheckingMode": "basic",
     "CodeGPT.apiKey": "CodeGPT Plus Beta",
 }
