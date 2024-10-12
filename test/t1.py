@@ -5,15 +5,16 @@ import keyboard
 #     # Datos de usuarios pre-cargados
 # #     # --gmail            --password --estado
 esudiantes =[
-    ["estudiante1","111", "estudiante1","soy el estudiante 1","Programar, leer","",""],
-    ["estudiante2","222", "estudiante2","soy el estudiante 2","Pintar, viajar" ,"",""],
-    ["estudiante3","333", "estudiante3","soy el estudiante 3","Bailar, cocinar","",""],
-    ["estudiante4","444", "estudiante4","soy el estudiante 4","Jugar Videojuegos y leer","",""],
-    ["estudiante5","555", "estudiante5","soy el estudiante 5","Estudiar matematicas","",""],
-    ["estudiante6","666", "estudiante6","soy el estudiante 6","Aprender nuevos idiomas","",""],
-    ["estudiante7","777", "estudiante7","soy el estudiante 7","Conocer nuevos lugares","",""],
-    ["estudiante8","888", "estudiante8","soy el estudiante 8","Hacer amigos nuevos","",""],
+    ["estudiante1@ayed.com","000111", "estudiante1","soy el estudiante 1","Programar, leer","",""],
+    ["estudiante2@ayed.com","111222", "estudiante2","soy el estudiante 2","Pintar, viajar" ,"",""],
+    ["estudiante3@ayed.com","222333", "estudiante3","soy el estudiante 3","Bailar, cocinar","",""],
+    ["estudiante4@ayed.com","333444", "estudiante4","soy el estudiante 4","Jugar Videojuegos y leer","",""],
+    ["Adminpre@ayed.com","000000", "estudiante5","soy el estudiante 5","Estudiar matematicas","",""],
+    ["Modpre@ayed.com","666", "estudiante6","soy el estudiante 6","Aprender nuevos idiomas","",""],
+    ["estudiante7@ayed.com","777", "estudiante7","soy el estudiante 7","Conocer nuevos lugares","",""],
+    ["estudiante8@ayed.com","888", "estudiante8","soy el estudiante 8","Hacer amigos nuevos","",""],
 ]
+
 
 
 for i in esudiantes:
@@ -59,6 +60,17 @@ while True:
                                 keyboard.press_and_release("backspace")
                                 print('1')
                         
+                    if even.name == "f5" or even.name == "bloq despl" :
+                        time.sleep(2)
+                        keyboard.write("1\n")
+                        r= randint(4,4)
+                        keyboard.write(esudiantes[r][0],tim2)
+                        keyboard.write("\n")
+                        keyboard.write(esudiantes[r][1],tim2)
+                        keyboard.write("\n")
+                        time.sleep(2)
+                        keyboard.write("2\n")
+                        keyboard.write("2\n")
                         
                     if even.name == "2":
                         keyboard.press_and_release("backspace")
@@ -156,34 +168,6 @@ while True:
                         print('salir')
                         break
         
-        # if even.name == "right ctrl":
-        #     print('right ctrl')
-        #     while True:
-        #         even = keyboard.read_event()
-        #         if even.event_type == keyboard.KEY_UP:
-        #             print()
-                    
-        # if even.name == "mayusculas":
-        #     print('mayusculas')
-        #     while True:
-        #         even = keyboard.read_event()
-        #         if even.event_type == keyboard.KEY_UP:
-        #             print()
-                    
-        # if even.name == "right shift":
-        #     print('right shift')
-        #     while True:
-        #         even = keyboard.read_event()
-        #         if even.event_type == keyboard.KEY_UP:
-        #             print()
-                    
-        # if even.name == "":
-        #     print('mod')
-        #     while True:
-        #         even = keyboard.read_event()
-        #         if even.event_type == keyboard.KEY_UP:
-        #             print()
-                    
         if even.name == "esc":
             print('salir')
             break
