@@ -235,8 +235,8 @@ def validar_fecha():
     # String: fecha_nacimiento
     # Bool: valida
     valida = False      
-    cartel("      Introduzca su fecha de nacimiento          En formato DD/MM/YYYY", AZUL)
     while not valida:
+        cartel("      Introduzca su fecha de nacimiento          En formato DD/MM/YYYY", AZUL)
         
         try:
             fecha_nacimiento = input("\n\033[1;34m>>> \033[0;m")
@@ -378,9 +378,6 @@ def getpass(ver = False, cartel = True) -> str:
     print(VACIO)
     return password.ljust(16,b" ").decode(encoding='iso8859-1')
 
-def invalido():
-    clear()
-    print("\033[1;31mDato Invalido, ingreselo de nuevo\033[0;m")
 #FUNCION PARA LOS APARTADOS EN CONSTRUCCION(GENERA EL CARTEL Y EL MENSAJE)
 def construcción():
     clear()
@@ -408,6 +405,81 @@ def cartel(text = "", color = VACIO):
     
     print(color+"╚"+"═"*48+"╝"+VACIO)
 
+#---------------------------------------BONUS TRACK-------------------------------------------#  
+#---------------Bonus TP2-----------------#
+def dibujar(p1,p2,p3,pos):
+    # var: 
+    # enteros: p1, p2, p3, pos, is
+    # String: barra
+    barra = " "+"\033[1;31m"+"#"*p1+"\033[1;32m"+"#"*p2+"\033[1;34m"+"#"*p3
+    
+    if pos == 0:
+        pos = 100
+    
+    clear()
+    print(barra)
+    
+    for i in range(pos):
+        print(" "*i+"\033[1;37m-^-",end="\r")
+        time.sleep(0.01) # modificando este parametro modificas la velocidad de la animación  
+    print()
+        
+def ruleta() -> None:
+    # var: 
+    # enteros: p1, p2, p3, num
+    clear()
+    cartel("ingrese las probabilidades de matcheo el valor sera valido solo cuando las sumas de las probabilidades es 100", AZUL)
+    
+    print("Oprima cualquier tecla para empezar...\n")
+    getch()
+    
+    clear()
+    p1 = int(input("\n\n\033[1;31mpersona 1: "))
+    while not( p1 >= 0 and p1 <= 98):
+        clear() 
+        p1 = int(input("\n\n\033[1;31mpersona 1: "))
+        
+    clear()
+    print(" "+"\033[1;31m"+"#"*p1)
+
+    p2 = int(input("\n\033[1;31mpersona 1: "+str(p1)+"         \033[1;32mpersona 2: "))
+    while not( p2 >= 0 and p2 <= 99 - p1): 
+        clear()
+        print(" "+"\033[1;31m"+"#"*p1)
+        p2 = int(input("\n\033[1;31mpersona 1: "+str(p1)+"         \033[1;32mpersona 2: "))
+
+    clear()
+    print(" "+"\033[1;31m"+"#"*p1+"\033[1;32m"+"#"*p2) 
+
+    p3 = 100 - p1 - p2 
+
+    clear()
+    print(" "+"\033[1;31m"+"#"*p1+"\033[1;32m"+"#"*p2+"\033[1;34m"+"#"*p3) 
+    print("\n\033[1;31mpersona 1: "+str(p1)+"          \033[1;32mpersona 2: "+str(p2)+"          \033[1;34mpersona 3: "+str(p3))
+
+    print("\n\033[0;mlos datos son correctos, Oprima cualquier tecla para iniciar la ruleta...")
+    getch()
+    num = random.randint(1,100)
+
+    for i in range(0,random.randint(3,5)):        
+        dibujar(p1,p2,p3,0)
+
+    dibujar(p1,p2,p3,num)
+
+    print("\033[1;31mpersona 1: "+str(p1)+"          \033[1;32mpersona 2: "+str(p2)+"          \033[1;34mpersona 3: "+str(p3))
+
+    print("\n\033[1;37m")
+    if num <= p1:
+        print("la persona elegida es la \033[1;31mnumero 1")
+    elif num > p1 and num <=p1+p2:
+        print("la persona elegida es la \033[1;32mnumero 2")
+    elif num > p1+p2:
+        print("la persona elegida es la \033[1;34mnumero 3")
+    print("\033[0;m")
+
+    print("Oprima cualquier tecla para volver al menu anterior\n")
+    getch()
+    clear()
 #---------------------------------------BONUS TRACK-------------------------------------------#  
 #---------------Bonus TP2-----------------#
 def track_1():
@@ -444,20 +516,17 @@ def track_1():
 def track_2():
     # (estudiantes: M_8x8_str)
     # var:
-    # enteros: c_est, matcheos, i  
-
-    #c_est = 0
-    #for i in range(0,8):
-    #    if estudiantes[i][2] == "ACTIVO":
-    #        c_est += 1
-         
-    #matcheos = c_est * c_est - c_est
+    # enteros: total, matcheos, t
+    # Estudiantes: vm
     t=os.path.getsize(r_estudiantes)
-    l_estudiantes.seek(0,0)
-    pickle.load(l_estudiantes)
-    x=l_estudiantes.tell()
-    cant=t//x
-    matcheos=(cant*(cant-1))//2
+    total=0
+    
+    while l_estudiantes.tell()<t:
+        vm=pickle.load(l_estudiantes)
+        if vm.estado:
+            total=total+1
+        
+    matcheos=(total*(total-1))//2
     clear()
     cartel("Bonus de matcheos posibles",AZUL)
     if matcheos == 0:
@@ -491,17 +560,19 @@ def bonus():
     while opc!="0":
         clear()  
         opc = menu("Bonus track","",[
-            "1. Bonus track 1 (TP2).",
-            "2. Bonus track 2 (TP2).",
-            "3. Bonus track 1 (TP3).",
+            "1. Bonus track 1 (TP1).",
+            "2. Bonus track 1 (TP2).",
+            "3. Bonus track 2 (TP2).",
+            "4. Bonus track 1 (TP3).",
             "0. Volver.",
-            "","","","","",""],
+            "","","","",""],
         AZUL)
          
         match opc:
-            case "1": track_1()            
-            case "2": track_2()     
-            case "3": bonus1_muestra()
+            case "1": ruleta()            
+            case "2": track_1()            
+            case "3": track_2()     
+            case "4": bonus1_muestra()
 
 #---------------------BONUS TP3------------------------------#
 #------------BONUS 1------------------#
@@ -548,9 +619,7 @@ def bonus1_muestra() -> None:
     for i in range(cant):
         l_estudiantes.seek(i*x,0)
         ve=pickle.load(l_estudiantes)
-        print("║"+BLANCO+f"   {ve.id}  "+AZUL, end="")
-        print("║"+BLANCO+f"   {ve.name}   "+AZUL, end="")
-        print("║"+BLANCO+"   "+str(bonus1_puntuacion(ve)).rjust(4," ")+"  "+AZUL+"║", end="")
+        print("║"+BLANCO+"   "+ve.id+"  "+AZUL+"║"+BLANCO+"   "+ve.name+"   "+AZUL+"║"+BLANCO+"   "+str(bonus1_puntuacion(ve)).rjust(4," ")+"  "+AZUL+"║")
     #bonus
     print("╚═════════╩════════════════════════════╩═════════╝\n"+BLANCO)
     print("Oprima cualquier tecla para volver al menu anterior")
@@ -1284,8 +1353,8 @@ def menu_reportes_estadisticos_admin() -> None:
     clear()
     cartel("Menu de Reportes Estadisticos",VIOLETA)
     print(VIOLETA+"\n° "+VACIO+"Cantidad de reportes realizados por los estudiantes: ",cant_rep_totales())
-    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes ignorados: ",cant_rep_por_estado("2"))
-    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes aceptados: ",cant_rep_por_estado("1"))
+    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes ignorados: ",cant_rep_por_estado("2"),"%")
+    print(VIOLETA+"° "+VACIO+"Porcentaje de reportes aceptados: ",cant_rep_por_estado("1"),"%")
     print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha ignorado : ",mod_con_mas_x_estado("reportes_ignorados","ignorado"))
     print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha aceptado : ",mod_con_mas_x_estado("reportes_aceptados","aceptado"))
     print(VIOLETA+"° "+VACIO+"Moderador que mayor cantidad de reportes ha procesado: ",cant_rep_mod())
@@ -1313,12 +1382,12 @@ def cant_rep_por_estado(estado:str) -> float:
     x=cant_rep_totales()
     if x != 0:    
         i=0
+        l_reportes.seek(0,0)
         for k in range(x):
-            l_reportes.seek(0,0)
             vr=pickle.load(l_reportes)
             if vr.estado==estado:
                 i += 1
-        return (i*100)/x
+        return ((i*1000)//x)/10
     else:
         return 0
 
@@ -1331,7 +1400,7 @@ def mod_con_mas_x_estado(estado:str,name:str) -> str:
     t=os.path.getsize(r_moderadores)
     
     salida = "" 
-    i = 1
+    i = 0
     l_moderadores.seek(0,0)
     while l_moderadores.tell()<t:        
         mod=pickle.load(l_moderadores)
@@ -1341,7 +1410,7 @@ def mod_con_mas_x_estado(estado:str,name:str) -> str:
         elif int(mod.__dict__[estado]) == i:
             salida = salida + ", " + mod.name
             
-    if salida == "":
+    if i == 0:
         salida = f"No se han {name} reportes"
 
     return salida
@@ -1355,7 +1424,7 @@ def cant_rep_mod() -> str:
     t=os.path.getsize(r_moderadores)
     
     salida = ""
-    i=1
+    i=0
     l_moderadores.seek(0,0)
     while l_moderadores.tell()<t:
         mod=pickle.load(l_moderadores)
@@ -1365,7 +1434,7 @@ def cant_rep_mod() -> str:
         elif int(mod.reportes_aceptados)+int(mod.reportes_ignorados) == i:
             salida = salida + ", " + mod.name
             
-    if salida=="":
+    if i==0:    
         salida = "No se han visto reportes"
     
     return salida
@@ -1941,9 +2010,10 @@ def menu_reportes_estadisticos(estudiante) -> None:
 
             if is_like(estudiante,estud) == -1 and is_like(estud,estudiante) != 1:
                 like_nodev += 1
-            
-    por_match = (cont_like * 100) / c_est
-
+    if c_est!=0:      
+        por_match = ((cont_like * 1000) // c_est)/10
+    else:
+        por_match = 0.0
     cartel("Reportes Estadísticos",AZUL)
     
     print(AZUL+"\n° "+VACIO+"Matcheados sobre el % posible: ",por_match,"%" )
@@ -2020,9 +2090,6 @@ def menu_desactivar_usuario(color = CIAN) -> None:
                     estudiante = pickle.load(l_estudiantes)
                     if estudiante.estado == False:
                         pos = -1
-
-                
-            invalido()
         clear()
 
         if deshabilitar_estud(pos,"¿Desea desactivar este perfil?",color):
@@ -2138,7 +2205,7 @@ def menu_reportes(id: int,is_mod = True) -> None:
                     n = int(input(VERDE+"\n>>> "+VACIO))
                     men = "dato fuera de rango"
                 except:
-                    n = -1
+                    n = -2
                     men = "Dato Invalido."
             clear()
             
@@ -2189,7 +2256,7 @@ def menu_reportes(id: int,is_mod = True) -> None:
                         estud2.estado = False
                         reporte.estado = "1"
                         
-                        l_estudiantes.seek(reporte.id_reportado*t1_e,0)
+                        l_estudiantes.seek(int(reporte.id_reportado)*t1_e,0)
                         pickle.dump(estud2, l_estudiantes)
                         l_estudiantes.flush()
                     
@@ -2200,8 +2267,8 @@ def menu_reportes(id: int,is_mod = True) -> None:
                 Format_Reportes(reporte)
                 pickle.dump(reporte,l_reportes)
                 l_reportes.flush()
-                        
-                    
+                
+                clear()    
                 opc = menu("Gestionar reportes",salida+"¿Desea ver otros reportes?",
                     ["s. Si",
                     "n. No.",
