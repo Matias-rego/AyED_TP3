@@ -8,7 +8,7 @@ Trabajo Practico nro 3 de la catedra de Algoritmos y Estructuras de Datos, hecho
 -01
 
 ## Profesores:
--Albaro Hergenreder
+-Alvaro Hergenreder
 -Claudia Pérez
 
 ## Integrantes: 
