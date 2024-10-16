@@ -34,6 +34,7 @@ lista3=[name_3,apellido_3, biografia_3,fecha_nacimiento_3,h_3,edad_3]
 import os
 from getpass import *
 from datetime import datetime
+import calendar
 
 #Constantes globales para el ingreso
 mailuser_1 = "estudiante1@ayed.com"
@@ -126,8 +127,10 @@ def FECHA_NACIMIENTO():
 		mesH = mesH + 12
 		anioAdicional = 1
 
+
 	meses = mesH - (mesF + mesAdicional)
 	anios = anioH - (anioF + anioAdicional)
+	dias = diaH - diaF
 	if userintroducido==mailuser_1:
 		fecha_nacimiento_1=fechaF
 		edad_1=(str(anios)+ " Años "+str(meses)+" Meses "+str(dias) +" Dias")
@@ -184,18 +187,36 @@ def VER_DATOS():
 
 def VER_CANDIDATOS():
 	if userintroducido==mailuser_1:
-		print("-------------------------------------------------")
 		print("Nombre:",name_2,",",apellido_2,"\nBiografia:",biografia_2,"\nFecha de nacimiento:",fecha_nacimiento_2,"\nHobbies:",h_2,"\nEdad:",edad_2,"\nMail:",mailuser_2)
 		print("-------------------------------------------------")
 		print("Nombre:",name_3,",",apellido_3,"\nBiografia:",biografia_3,"\nFecha de nacimiento:",fecha_nacimiento_3,"\nHobbies:",h_3,"\nEdad:",edad_3,"\nMail:",mailuser_3)
 		ME_GUSTA()
+	elif userintroducido==mailuser_2:
+		print("Nombre:",name_1,",",apellido_1,"\nBiografia:",biografia_1,"\nFecha de nacimiento:",fecha_nacimiento_1,"\nHobbies:",h_1,"\nEdad:",edad_1,"\nMail:",mailuser_1)
+		print("-------------------------------------------------")
+		print("Nombre:",name_3,",",apellido_3,"\nBiografia:",biografia_3,"\nFecha de nacimiento:",fecha_nacimiento_3,"\nHobbies:",h_3,"\nEdad:",edad_3,"\nMail:",mailuser_3)
+		ME_GUSTA()
+	elif userintroducido==mailuser_3:
+		print("-------------------------------------------------")
+		print("Nombre:",name_1,",",apellido_1,"\nBiografia:",biografia_1,"\nFecha de nacimiento:",fecha_nacimiento_1,"\nHobbies:",h_1,"\nEdad:",edad_1,"\nMail:",mailuser_1)
+		print("-------------------------------------------------")
+		print("Nombre:",name_2,",",apellido_2,"\nBiografia:",biografia_2,"\nFecha de nacimiento:",fecha_nacimiento_2,"\nHobbies:",h_2,"\nEdad:",edad_2,"\nMail:",mailuser_2)
+		ME_GUSTA()
+	
 
 def ME_GUSTA():
 		global reportes
-		me_gusta = input("Desea dar me gusta a algun usuario?")
-		while me_gusta not in listan:
-			print("USUARIO INTRODUCIDO NO EXISTENTE")
-			me_gusta = input("¿Que usuario desea reportar?. Por favor, escriba el nombre de dicho usuario: ")
+		lol = input("Desea dar me gusta a algun usuario? <si o no>")
+		while lol!="si" and lol!="no":
+			print("VALORES INVALIDOS")
+			lol = input("Desea dar me gusta a algun usuario? <si o no>")
+		if lol=="si":
+			me_gusta= input("¿A que usuario desea dar me gusta?. Por favor, escriba el nombre de dicho usuario: ")
+			while me_gusta not in listan:
+				print("USUARIO INTRODUCIDO NO EXISTENTE")
+				me_gusta = input("¿A que usuario desea dar me gusta?. Por favor, escriba el nombre de dicho usuario: ")
+		else:
+			pass
 		os.system("cls")
 		SEGUNDO_SUBMENU()
      
